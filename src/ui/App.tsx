@@ -1,13 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type NodeData = Record<string, unknown>;
-type AssetInfo = { name: string; type: string };
+type AssetInfo = {
+  name: string;
+  type: string;
+  isIcon?: boolean;
+  iconName?: string;
+  iconVariant?: string;
+};
 type Assets = { svgNodes: AssetInfo[]; imageNodes: AssetInfo[] };
 
 type PluginMessage =
   | { type: "UPDATE"; name: string; json: NodeData; assets: Assets }
   | { type: "CLEAR" }
-  | { type: "ERROR"; message: string };
+  | { type: "ERROR"; message: string }
+  | { type: "ASSETS_EXPORTING" }
+  | { type: "ASSET_PROGRESS"; done: number; total: number }
+  | { type: "ASSETS_EXPORTED"; json: NodeData; images: { hash: string; base64: string }[] };
 
 const STRUCTURE_KEYS = new Set([
   "name", "type", "visible",
@@ -20,7 +29,7 @@ const STRUCTURE_KEYS = new Set([
   "paddingLeft", "paddingRight", "paddingTop", "paddingBottom",
   "minWidth", "minHeight", "maxWidth", "maxHeight",
   "constraints", "clipsContent", "overflowDirection",
-  "characters", "children",
+  "characters", "styledTextSegments", "children",
 ]);
 
 const DESIGN_KEYS = new Set([
@@ -36,7 +45,7 @@ const DESIGN_KEYS = new Set([
   "letterSpacing", "lineHeight",
   "textAlignHorizontal", "textAlignVertical",
   "textCase", "textDecoration", "textDecorationColor", "textDecorationStyle",
-  "characters", "annotations", "children",
+  "characters", "styledTextSegments", "svgData", "annotations", "children",
 ]);
 
 function pickKeys(node: NodeData, keys: Set<string>): NodeData {
@@ -52,7 +61,7 @@ function pickKeys(node: NodeData, keys: Set<string>): NodeData {
   return result;
 }
 
-function download(data: unknown, filename: string) {
+function downloadJson(data: unknown, filename: string) {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -62,39 +71,103 @@ function download(data: unknown, filename: string) {
   URL.revokeObjectURL(url);
 }
 
+// imageHash → base64 매핑을 fills 안에 직접 주입
+function injectImageData(node: NodeData, imageMap: Map<string, string>): NodeData {
+  const result = { ...node };
+  if (Array.isArray(result.fills)) {
+    result.fills = (result.fills as NodeData[]).map((fill) => {
+      if (fill.type === "IMAGE" && typeof fill.imageHash === "string") {
+        const base64 = imageMap.get(fill.imageHash as string);
+        if (base64) return { ...fill, imageData: `data:image/png;base64,${base64}` };
+      }
+      return fill;
+    });
+  }
+  if (Array.isArray(result.children)) {
+    result.children = (result.children as NodeData[]).map((child) =>
+      injectImageData(child, imageMap)
+    );
+  }
+  return result;
+}
+
 export default function App() {
   const [frameName, setFrameName] = useState<string | null>(null);
   const [json, setJson] = useState<NodeData | null>(null);
   const [assets, setAssets] = useState<Assets | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [assetsOpen, setAssetsOpen] = useState(false);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+
+  const pendingDownload = useRef<"raw" | "structure" | "design" | null>(null);
+  const slugRef = useRef<string>("frame");
+
+  useEffect(() => {
+    slugRef.current = frameName ?? "frame";
+  }, [frameName]);
 
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
       const msg = event.data.pluginMessage as PluginMessage;
       if (!msg) return;
+
       if (msg.type === "UPDATE") {
         setFrameName(msg.name);
         setJson(msg.json);
         setAssets(msg.assets);
         setError(null);
+        pendingDownload.current = null;
       } else if (msg.type === "CLEAR") {
         setFrameName(null);
         setJson(null);
         setAssets(null);
         setError(null);
+        pendingDownload.current = null;
       } else if (msg.type === "ERROR") {
         setError(msg.message);
+        pendingDownload.current = null;
+      } else if (msg.type === "ASSETS_EXPORTING") {
+        setProgress({ done: 0, total: 0 });
+      } else if (msg.type === "ASSET_PROGRESS") {
+        setProgress({ done: msg.done, total: msg.total });
+      } else if (msg.type === "ASSETS_EXPORTED") {
+        setProgress(null);
+
+        const type = pendingDownload.current;
+        pendingDownload.current = null;
+        if (!type) return;
+
+        // 이미지 주입
+        const imageMap = new Map(
+          msg.images.map(({ hash, base64 }) => [hash, base64])
+        );
+        const injected = injectImageData(msg.json, imageMap);
+        setJson(injected);
+
+        const slug = slugRef.current;
+        if (type === "raw") {
+          downloadJson(injected, `${slug}.json`);
+        } else if (type === "structure") {
+          downloadJson(pickKeys(injected, STRUCTURE_KEYS), `${slug}_structure.json`);
+        } else if (type === "design") {
+          downloadJson(pickKeys(injected, DESIGN_KEYS), `${slug}_design.json`);
+        }
       }
     }
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, []);
 
-  const slug = frameName ?? "frame";
+  function handleDownload(type: "raw" | "structure" | "design") {
+    if (!json) return;
+    pendingDownload.current = type;
+    parent.postMessage({ pluginMessage: { type: "EXPORT_ASSETS" } }, "*");
+  }
+
   const hasSvg = (assets?.svgNodes.length ?? 0) > 0;
   const hasImage = (assets?.imageNodes.length ?? 0) > 0;
   const totalAssets = (assets?.svgNodes.length ?? 0) + (assets?.imageNodes.length ?? 0);
+  const isExtracting = progress !== null;
 
   return (
     <div style={styles.container}>
@@ -106,21 +179,35 @@ export default function App() {
 
       {json && (
         <div style={styles.buttonRow}>
-          <button style={styles.btn} onClick={() => download(json, `${slug}.json`)}>
+          <button
+            style={{ ...styles.btn, opacity: isExtracting ? 0.5 : 1 }}
+            disabled={isExtracting}
+            onClick={() => handleDownload("raw")}
+          >
             Raw
           </button>
           <button
-            style={{ ...styles.btn, ...styles.btnStructure }}
-            onClick={() => download(pickKeys(json, STRUCTURE_KEYS), `${slug}_structure.json`)}
+            style={{ ...styles.btn, ...styles.btnStructure, opacity: isExtracting ? 0.5 : 1 }}
+            disabled={isExtracting}
+            onClick={() => handleDownload("structure")}
           >
             Structure
           </button>
           <button
-            style={{ ...styles.btn, ...styles.btnDesign }}
-            onClick={() => download(pickKeys(json, DESIGN_KEYS), `${slug}_design.json`)}
+            style={{ ...styles.btn, ...styles.btnDesign, opacity: isExtracting ? 0.5 : 1 }}
+            disabled={isExtracting}
+            onClick={() => handleDownload("design")}
           >
             Design
           </button>
+        </div>
+      )}
+
+      {isExtracting && (
+        <div style={styles.progressBar}>
+          {progress!.total > 0
+            ? `이미지 추출 중... ${progress!.done}/${progress!.total}`
+            : "에셋 추출 중..."}
         </div>
       )}
 
@@ -140,13 +227,17 @@ export default function App() {
               {hasSvg && (
                 <>
                   <div style={styles.assetsLabel}>
-                    <span style={{ color: "#98c379" }}>SVG 내보내기 대상</span>
+                    <span style={{ color: "#98c379" }}>SVG 아이콘</span>
                     <span style={styles.assetsCount}>{assets.svgNodes.length}</span>
+                    <span style={styles.assetsNote}>JSON 다운로드 시 svgData 자동 포함</span>
                   </div>
                   {assets.svgNodes.map((n, i) => (
                     <div key={i} style={styles.assetItem}>
                       <span style={styles.assetType}>{n.type}</span>
                       <span style={styles.assetName}>{n.name}</span>
+                      {n.isIcon && n.iconVariant && n.iconVariant !== "unknown" && (
+                        <span style={styles.iconVariantBadge}>{n.iconVariant}</span>
+                      )}
                     </div>
                   ))}
                 </>
@@ -155,8 +246,9 @@ export default function App() {
               {hasImage && (
                 <>
                   <div style={{ ...styles.assetsLabel, marginTop: hasSvg ? 8 : 0 }}>
-                    <span style={{ color: "#e5c07b" }}>이미지 플레이스홀더 대상</span>
+                    <span style={{ color: "#e5c07b" }}>이미지</span>
                     <span style={styles.assetsCount}>{assets.imageNodes.length}</span>
+                    <span style={styles.assetsNote}>JSON 다운로드 시 imageData 자동 포함</span>
                   </div>
                   {assets.imageNodes.map((n, i) => (
                     <div key={i} style={styles.assetItem}>
@@ -235,6 +327,14 @@ const styles: Record<string, React.CSSProperties> = {
     borderColor: "#c678dd",
     color: "#c678dd",
   },
+  progressBar: {
+    padding: "4px 12px",
+    background: "#2a2a1a",
+    color: "#e5c07b",
+    fontSize: 10,
+    borderBottom: "1px solid #333",
+    flexShrink: 0,
+  },
   assetsSection: {
     borderBottom: "1px solid #333",
     flexShrink: 0,
@@ -279,6 +379,14 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 10,
     color: "#888",
   },
+  assetsNote: {
+    marginLeft: "auto",
+    fontSize: 9,
+    color: "#666",
+    fontWeight: 400,
+    textTransform: "none",
+    letterSpacing: 0,
+  },
   assetItem: {
     display: "flex",
     alignItems: "center",
@@ -298,6 +406,15 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
+  },
+  iconVariantBadge: {
+    fontSize: 9,
+    color: "#61afef",
+    background: "#1a2a3a",
+    padding: "1px 4px",
+    borderRadius: 2,
+    flexShrink: 0,
+    marginLeft: "auto",
   },
   textarea: {
     flex: 1,
