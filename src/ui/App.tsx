@@ -57,12 +57,6 @@ const DESIGN_KEYS = new Set([
   "children",
 ]);
 
-const QA_KEYS = new Set([
-  "name","type",
-  "width","height",
-  "fills",
-  "children",
-]);
 
 /* =========================
    IMAGE SLOT HELPERS
@@ -122,28 +116,78 @@ function pickKeys(node: NodeData, keys: Set<string>): NodeData {
   return result;
 }
 
-function pickQAKeys(node: NodeData): NodeData {
-  const result: NodeData = {};
+/* =========================
+   MANIFEST
+========================= */
 
-  for (const k of Object.keys(node)) {
-    if (!QA_KEYS.has(k)) continue;
+type ManifestItem = {
+  id: string;
+  name: string;
+  type: string;
+  depth: number;
+  width: number;
+  height: number;
+  childCount: number;
+  hasText: boolean;
+  hasImage: boolean;
+  textContent?: string;
+  imageSlot?: ImageSlot;
+};
 
-    if (k === "fills" && Array.isArray(node.fills)) {
-      result.fills = node.fills
-        .filter((f: any) => f.type === "IMAGE")
-        .map((f: any) => f.imageSlot);
-      continue;
-    }
+function buildManifestItems(
+  node: NodeData,
+  depth: number,
+  parentId: string,
+  index: number,
+  items: ManifestItem[]
+): void {
+  const id = parentId ? `${parentId}.${index + 1}` : `${index + 1}`;
 
-    if (k === "children" && Array.isArray(node.children)) {
-      result.children = node.children.map(pickQAKeys);
-      continue;
-    }
+  const imageFill = Array.isArray(node.fills)
+    ? node.fills.find((f: any) => f.type === "IMAGE")
+    : undefined;
 
-    result[k] = node[k];
+  const item: ManifestItem = {
+    id,
+    name: node.name ?? "",
+    type: node.type ?? "",
+    depth,
+    width: Math.round(node.width ?? 0),
+    height: Math.round(node.height ?? 0),
+    childCount: Array.isArray(node.children) ? node.children.length : 0,
+    hasText: node.type === "TEXT",
+    hasImage: !!imageFill,
+    ...(node.type === "TEXT" && { textContent: node.characters ?? "" }),
+  };
+
+  if (imageFill) {
+    item.imageSlot = {
+      slotId: normalizeSlotId(node),
+      role: "unknown",
+      expectedSize: { width: item.width, height: item.height },
+      aspectRatio: item.width && item.height ? item.width / item.height : 1,
+    };
   }
 
-  return result;
+  items.push(item);
+
+  if (Array.isArray(node.children)) {
+    node.children.forEach((child: NodeData, i: number) =>
+      buildManifestItems(child, depth + 1, id, i, items)
+    );
+  }
+}
+
+function buildManifest(root: NodeData) {
+  const items: ManifestItem[] = [];
+  buildManifestItems(root, 0, "", 0, items);
+  return {
+    page: root.name ?? "unknown",
+    totalComponents: items.length,
+    imageSlotCount: items.filter((i) => i.hasImage).length,
+    textNodeCount: items.filter((i) => i.hasText).length,
+    components: items,
+  };
 }
 
 /* =========================
@@ -248,12 +292,12 @@ export default function App() {
           Design
         </button>
         <button
-          style={{ color: "#e06c75" }}
+          style={{ color: "#e5c07b" }}
           onClick={() =>
-            downloadJson(pickQAKeys(json), `${slug}_qa.json`)
+            downloadJson(buildManifest(json), `${slug}_manifest.json`)
           }
         >
-          QA
+          Manifest
         </button>
       </div>
 
