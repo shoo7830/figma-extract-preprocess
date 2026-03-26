@@ -1,0 +1,137 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1773216751700,
+  "projectRoot": "/Users/gw1402535/Desktop/Ariawork/ir-json",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "18.3.1",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "18.3.1",
+        "category": "frontend"
+      },
+      {
+        "name": "vite",
+        "version": "6.0.7",
+        "category": "build"
+      }
+    ],
+    "packageManager": "pnpm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "pnpm build",
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": "pnpm dev",
+    "scripts": {
+      "dev": "vite build --watch --mode development --config vite.config.ui.ts",
+      "build": "vite build --config vite.config.ui.ts && vite build --config vite.config.main.ts",
+      "preview": "vite preview"
+    }
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 2,
+      "lastAccessed": 1773216751611,
+      "keyFiles": [
+        "index.html",
+        "main.js"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 4,
+      "lastAccessed": 1773216751618,
+      "keyFiles": [
+        "2026-03-06.md",
+        "2026-03-10-figma-parser-improvements.md",
+        "2026-03-10.md",
+        "intro.md"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 1,
+      "lastAccessed": 1773216751653,
+      "keyFiles": [
+        "main.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/ui/App.tsx",
+      "accessCount": 29,
+      "lastAccessed": 1773293828408,
+      "type": "file"
+    },
+    {
+      "path": "src/main.ts",
+      "accessCount": 15,
+      "lastAccessed": 1773293763046,
+      "type": "file"
+    },
+    {
+      "path": "tsconfig.json",
+      "accessCount": 3,
+      "lastAccessed": 1773217070450,
+      "type": "file"
+    },
+    {
+      "path": "docs/2026-03-12.md",
+      "accessCount": 3,
+      "lastAccessed": 1773295420889,
+      "type": "file"
+    },
+    {
+      "path": "tsconfig.main.json",
+      "accessCount": 2,
+      "lastAccessed": 1773217083175,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
