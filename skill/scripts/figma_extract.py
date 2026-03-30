@@ -10,7 +10,6 @@ import os
 import re
 import ssl
 import sys
-import ssl
 import urllib.request
 import urllib.error
 from pathlib import Path
