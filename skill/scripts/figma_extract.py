@@ -84,7 +84,7 @@ def figma_get(path: str, token: str) -> dict:
 def fetch_node(file_key: str, node_id: str, token: str) -> dict:
     import urllib.parse
     encoded = urllib.parse.quote(node_id, safe="")
-    data = figma_get(f"/files/{file_key}/nodes?ids={encoded}", token)
+    data = figma_get(f"/files/{file_key}/nodes?ids={encoded}&geometry=paths", token)
     nodes = data.get("nodes", {})
 
     for key in [node_id, node_id.replace(":", "-")]:
@@ -102,8 +102,9 @@ def normalize_slot_id(node: dict) -> str:
 
 
 def transform_image_fill(node: dict) -> dict:
-    width = round(node.get("width") or 0)
-    height = round(node.get("height") or 0)
+    bbox = node.get("absoluteBoundingBox") or {}
+    width = round(bbox.get("width") or 0)
+    height = round(bbox.get("height") or 0)
     return {
         "type": "IMAGE",
         "imageSlot": {
@@ -115,18 +116,35 @@ def transform_image_fill(node: dict) -> dict:
     }
 
 
-def pick_keys(node: dict, keys: set) -> dict:
+def pick_keys(node: dict, keys: set, root_bbox: dict = None) -> dict:
     result = {}
+
+    # absoluteBoundingBox → 상대 좌표(x/y) + 크기(width/height) 매핑
+    bbox = node.get("absoluteBoundingBox")
+    if bbox:
+        if root_bbox is None:
+            root_bbox = bbox
+        if "x" in keys:
+            result["x"] = round(bbox["x"] - root_bbox["x"])
+        if "y" in keys:
+            result["y"] = round(bbox["y"] - root_bbox["y"])
+        if "width" in keys:
+            result["width"] = round(bbox["width"])
+        if "height" in keys:
+            result["height"] = round(bbox["height"])
+
     for k, v in node.items():
         if k not in keys:
             continue
+        if k in ("x", "y", "width", "height"):
+            continue  # 위에서 bbox로 처리
         if k == "fills" and isinstance(v, list):
             result["fills"] = [
                 transform_image_fill(node) if f.get("type") == "IMAGE" else f
                 for f in v
             ]
         elif k == "children" and isinstance(v, list):
-            result["children"] = [pick_keys(child, keys) for child in v]
+            result["children"] = [pick_keys(child, keys, root_bbox) for child in v]
         else:
             result[k] = v
     return result
@@ -142,8 +160,9 @@ def build_manifest_items(node: dict, depth: int, parent_id: str, index: int, ite
         None
     )
 
-    width = round(node.get("width") or 0)
-    height = round(node.get("height") or 0)
+    bbox = node.get("absoluteBoundingBox") or {}
+    width = round(bbox.get("width") or 0)
+    height = round(bbox.get("height") or 0)
     children = node.get("children") or []
 
     item = {
