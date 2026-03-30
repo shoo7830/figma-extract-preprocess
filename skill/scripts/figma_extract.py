@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
 Figma Extract — REST API 기반 JSON 추출 스크립트
-플러그인 없이 Figma URL로 structure/design/qa JSON을 추출합니다.
+플러그인 없이 Figma URL로 structure/design/manifest JSON을 추출합니다.
 """
 
 import argparse
 import json
 import os
 import re
+import ssl
 import sys
 import ssl
 import urllib.request
@@ -40,14 +41,7 @@ DESIGN_KEYS = {
     "fontName", "fontSize", "fontWeight",
     "letterSpacing", "lineHeight",
     "textAlignHorizontal", "textAlignVertical",
-    "characters",
-    "children",
-}
-
-QA_KEYS = {
-    "name", "type",
-    "width", "height",
-    "fills",
+    "characters", "styledTextSegments",
     "children",
 }
 
@@ -59,13 +53,11 @@ def parse_figma_url(url: str) -> tuple[str, str]:
     Figma URL에서 fileKey와 nodeId 추출.
     node-id는 URL에서 1-23 형식 → API용 1:23 형식으로 변환.
     """
-    # fileKey 추출
     match = re.search(r"/(?:design|file)/([A-Za-z0-9]+)", url)
     if not match:
         raise ValueError(f"Figma URL에서 fileKey를 찾을 수 없습니다: {url}")
     file_key = match.group(1)
 
-    # nodeId 추출
     match = re.search(r"node-id=([^&]+)", url)
     if not match:
         raise ValueError("URL에 node-id가 없습니다. Figma에서 프레임을 선택 후 Copy link 하세요.")
@@ -91,11 +83,11 @@ def figma_get(path: str, token: str) -> dict:
 
 
 def fetch_node(file_key: str, node_id: str, token: str) -> dict:
+    import urllib.parse
     encoded = urllib.parse.quote(node_id, safe="")
     data = figma_get(f"/files/{file_key}/nodes?ids={encoded}", token)
     nodes = data.get("nodes", {})
 
-    # node_id 키 탐색 (1:23 또는 I1:23 형식 대응)
     for key in [node_id, node_id.replace(":", "-")]:
         if key in nodes:
             return nodes[key]["document"]
@@ -141,23 +133,59 @@ def pick_keys(node: dict, keys: set) -> dict:
     return result
 
 
-def pick_qa_keys(node: dict) -> dict:
-    result = {}
-    for k, v in node.items():
-        if k not in QA_KEYS:
-            continue
-        if k == "fills" and isinstance(v, list):
-            slots = [
-                transform_image_fill(node)["imageSlot"]
-                for f in v if f.get("type") == "IMAGE"
-            ]
-            if slots:
-                result["fills"] = slots
-        elif k == "children" and isinstance(v, list):
-            result["children"] = [pick_qa_keys(child) for child in v]
-        else:
-            result[k] = v
-    return result
+# ─── Manifest (App.tsx의 buildManifest 재현) ──────────────────────────────────
+
+def build_manifest_items(node: dict, depth: int, parent_id: str, index: int, items: list) -> None:
+    item_id = f"{parent_id}.{index + 1}" if parent_id else str(index + 1)
+
+    image_fill = next(
+        (f for f in (node.get("fills") or []) if f.get("type") == "IMAGE"),
+        None
+    )
+
+    width = round(node.get("width") or 0)
+    height = round(node.get("height") or 0)
+    children = node.get("children") or []
+
+    item = {
+        "id": item_id,
+        "name": node.get("name", ""),
+        "type": node.get("type", ""),
+        "depth": depth,
+        "width": width,
+        "height": height,
+        "childCount": len(children),
+        "hasText": node.get("type") == "TEXT",
+        "hasImage": bool(image_fill),
+    }
+
+    if node.get("type") == "TEXT":
+        item["textContent"] = node.get("characters", "")
+
+    if image_fill:
+        item["imageSlot"] = {
+            "slotId": normalize_slot_id(node),
+            "role": "unknown",
+            "expectedSize": {"width": width, "height": height},
+            "aspectRatio": round(width / height, 4) if height else 1,
+        }
+
+    items.append(item)
+
+    for i, child in enumerate(children):
+        build_manifest_items(child, depth + 1, item_id, i, items)
+
+
+def build_manifest(root: dict) -> dict:
+    items: list = []
+    build_manifest_items(root, 0, "", 0, items)
+    return {
+        "page": root.get("name", "unknown"),
+        "totalComponents": len(items),
+        "imageSlotCount": sum(1 for i in items if i["hasImage"]),
+        "textNodeCount": sum(1 for i in items if i["hasText"]),
+        "components": items,
+    }
 
 
 # ─── 저장 ─────────────────────────────────────────────────────────────────────
@@ -172,15 +200,13 @@ def save_json(data: dict, path: Path):
 # ─── 메인 ─────────────────────────────────────────────────────────────────────
 
 def main():
-    import urllib.parse  # fetch_node에서 사용
-
     parser = argparse.ArgumentParser(description="Figma REST API JSON 추출기")
     parser.add_argument("--url", required=True, help="Figma 프레임 URL")
     parser.add_argument("--output", default=".", help="저장 디렉토리 (기본: 현재 디렉토리)")
     parser.add_argument(
         "--types",
-        default="structure,design,qa",
-        help="추출할 JSON 종류 (쉼표 구분, 기본: structure,design,qa)",
+        default="structure,design,manifest",
+        help="추출할 JSON 종류 (쉼표 구분, 기본: structure,design,manifest)",
     )
     args = parser.parse_args()
 
@@ -193,26 +219,26 @@ def main():
     types = {t.strip() for t in args.types.split(",")}
     output_dir = Path(args.output)
 
-    print(f"URL 파싱 중...")
+    print("URL 파싱 중...")
     file_key, node_id = parse_figma_url(args.url)
     print(f"  fileKey: {file_key}")
     print(f"  nodeId:  {node_id}")
 
-    print(f"Figma API 호출 중...")
+    print("Figma API 호출 중...")
     node = fetch_node(file_key, node_id, token)
     frame_name = node.get("name", "frame")
     slug = re.sub(r"[^a-zA-Z0-9가-힣_\-]", "_", frame_name)
     print(f"  프레임: {frame_name}")
 
-    print(f"JSON 생성 중...")
+    print("JSON 생성 중...")
     if "structure" in types:
         save_json(pick_keys(node, STRUCTURE_KEYS), output_dir / f"{slug}_structure.json")
     if "design" in types:
         save_json(pick_keys(node, DESIGN_KEYS), output_dir / f"{slug}_design.json")
-    if "qa" in types:
-        save_json(pick_qa_keys(node), output_dir / f"{slug}_qa.json")
+    if "manifest" in types:
+        save_json(build_manifest(node), output_dir / f"{slug}_manifest.json")
 
-    print(f"\n완료!")
+    print("\n완료!")
 
 
 if __name__ == "__main__":
