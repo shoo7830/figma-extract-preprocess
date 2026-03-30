@@ -9,6 +9,7 @@ import json
 import os
 import re
 import sys
+import ssl
 import urllib.request
 import urllib.error
 from pathlib import Path
@@ -78,8 +79,11 @@ def parse_figma_url(url: str) -> tuple[str, str]:
 def figma_get(path: str, token: str) -> dict:
     url = f"https://api.figma.com/v1{path}"
     req = urllib.request.Request(url, headers={"X-Figma-Token": token})
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
     try:
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, context=ctx) as resp:
             return json.loads(resp.read())
     except urllib.error.HTTPError as e:
         body = e.read().decode()
