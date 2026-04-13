@@ -8,21 +8,15 @@ type NodeData = Record<string, any>;
 
 type ImageSlot = {
   slotId: string;
-  role?: string;
-  expectedSize: {
-    width: number;
-    height: number;
-  };
+  role: string;
+  suggestedPath: string;
+  expectedSize: { width: number; height: number };
   aspectRatio: number;
-};
-
-type Assets = {
-  svgNodes: any[];
-  imageNodes: any[];
+  objectFit: "cover" | "contain" | "none";
 };
 
 type PluginMessage =
-  | { type: "UPDATE"; name: string; json: NodeData; assets: Assets }
+  | { type: "UPDATE"; name: string; json: NodeData }
   | { type: "CLEAR" }
   | { type: "ERROR"; message: string };
 
@@ -30,9 +24,8 @@ type PluginMessage =
    KEYS
 ========================= */
 
-const STRUCTURE_KEYS = new Set([
-  "name","type","visible",
-  "x","y","width","height","rotation",
+const LAYOUT_KEYS = new Set([
+  "x","y","width","height","rotation","visible",
   "layoutMode","layoutAlign","layoutGrow","layoutPositioning","layoutWrap",
   "layoutSizingHorizontal","layoutSizingVertical",
   "primaryAxisAlignItems","primaryAxisSizingMode",
@@ -41,34 +34,22 @@ const STRUCTURE_KEYS = new Set([
   "paddingLeft","paddingRight","paddingTop","paddingBottom",
   "minWidth","minHeight","maxWidth","maxHeight",
   "constraints","clipsContent","overflowDirection",
-  "children","fills",
 ]);
 
-const DESIGN_KEYS = new Set([
-  "name","type",
-  "fills",
+const STYLE_KEYS = new Set([
   "strokes","strokeWeight","strokeAlign",
   "effects","opacity",
   "cornerRadius",
   "fontName","fontSize","fontWeight",
   "letterSpacing","lineHeight",
   "textAlignHorizontal","textAlignVertical",
-  "characters","styledTextSegments",
-  "children",
-]);
-
-const QA_KEYS = new Set([
-  "name","type",
-  "width","height",
-  "fills",
-  "children",
 ]);
 
 /* =========================
    IMAGE SLOT HELPERS
 ========================= */
 
-function normalizeSlotId(node: NodeData) {
+function normalizeSlotId(node: NodeData): string {
   return (
     node.name
       ?.toLowerCase()
@@ -77,73 +58,83 @@ function normalizeSlotId(node: NodeData) {
   );
 }
 
-function transformImageFill(node: NodeData): any {
+function inferImageRole(node: NodeData): string {
+  const name = (node.name ?? "").toLowerCase();
+  const w = node.width ?? 0;
+  const h = node.height ?? 0;
+  if (/hero|banner|cover/.test(name)) return "hero";
+  if (/bg|background|backdrop/.test(name)) return "background";
+  if (/thumb|thumbnail/.test(name)) return "thumbnail";
+  if (/avatar|profile|user/.test(name)) return "avatar";
+  if (/product|item|goods/.test(name)) return "product";
+  if (/logo/.test(name)) return "logo";
+  if (w > 800) return "hero";
+  if (w === h && w <= 100) return "avatar";
+  return "content";
+}
+
+function scaleModeToObjectFit(scaleMode?: string): "cover" | "contain" | "none" {
+  if (scaleMode === "FIT") return "contain";
+  if (scaleMode === "TILE") return "none";
+  return "cover";
+}
+
+function buildImageSlot(fill: any, node: NodeData): ImageSlot {
   const width = Math.round(node.width ?? 0);
   const height = Math.round(node.height ?? 0);
+  const slotId = normalizeSlotId(node);
+  return {
+    slotId,
+    role: inferImageRole(node),
+    suggestedPath: `./images/${slotId}.png`,
+    expectedSize: { width, height },
+    aspectRatio: width && height ? parseFloat((width / height).toFixed(2)) : 1,
+    objectFit: scaleModeToObjectFit(fill?.scaleMode),
+  };
+}
 
+function transformImageFill(fill: any, node: NodeData): any {
   return {
     type: "IMAGE",
-    imageSlot: {
-      slotId: normalizeSlotId(node),
-      role: "unknown",
-      expectedSize: { width, height },
-      aspectRatio: width && height ? width / height : 1,
-    } satisfies ImageSlot,
+    imageSlot: buildImageSlot(fill, node),
   };
 }
 
 /* =========================
-   PICK FUNCTIONS
+   JSON BUILDERS
 ========================= */
 
-function pickKeys(node: NodeData, keys: Set<string>): NodeData {
-  const result: NodeData = {};
+function pickNode(node: NodeData, keys: Set<string>): NodeData {
+  const result: NodeData = {
+    name: node.name,
+    type: node.type,
+  };
 
-  for (const k of Object.keys(node)) {
-    if (!keys.has(k)) continue;
-
-    if (k === "fills" && Array.isArray(node.fills)) {
+  for (const k of keys) {
+    if (k === "fills" && Array.isArray(node.fills) && node.fills.length > 0) {
       result.fills = node.fills.map((fill: any) =>
-        fill.type === "IMAGE" ? transformImageFill(node) : fill
+        fill.type === "IMAGE" ? transformImageFill(fill, node) : fill
       );
       continue;
     }
-
-    if (k === "children" && Array.isArray(node.children)) {
-      result.children = node.children.map((child: NodeData) =>
-        pickKeys(child, keys)
-      );
-      continue;
+    if (node[k] !== undefined) {
+      result[k] = node[k];
     }
+  }
 
-    result[k] = node[k];
+  if (Array.isArray(node.children)) {
+    result.children = node.children.map((child: NodeData) => pickNode(child, keys));
   }
 
   return result;
 }
 
-function pickQAKeys(node: NodeData): NodeData {
-  const result: NodeData = {};
+function buildStructure(node: NodeData): NodeData {
+  return pickNode(node, LAYOUT_KEYS);
+}
 
-  for (const k of Object.keys(node)) {
-    if (!QA_KEYS.has(k)) continue;
-
-    if (k === "fills" && Array.isArray(node.fills)) {
-      result.fills = node.fills
-        .filter((f: any) => f.type === "IMAGE")
-        .map((f: any) => f.imageSlot);
-      continue;
-    }
-
-    if (k === "children" && Array.isArray(node.children)) {
-      result.children = node.children.map(pickQAKeys);
-      continue;
-    }
-
-    result[k] = node[k];
-  }
-
-  return result;
+function buildDesign(node: NodeData): NodeData {
+  return pickNode(node, STYLE_KEYS);
 }
 
 /* =========================
@@ -163,30 +154,6 @@ function downloadJson(data: unknown, filename: string) {
 }
 
 /* =========================
-   PLACEHOLDER
-========================= */
-
-function ImagePlaceholder({ slot }: { slot: ImageSlot }) {
-  return (
-    <div
-      style={{
-        width: slot.expectedSize.width,
-        height: slot.expectedSize.height,
-        background: "#2a2a2a",
-        border: "1px dashed #555",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 11,
-        color: "#999",
-      }}
-    >
-      {slot.slotId}
-    </div>
-  );
-}
-
-/* =========================
    APP
 ========================= */
 
@@ -194,6 +161,7 @@ export default function App() {
   const [frameName, setFrameName] = useState<string | null>(null);
   const [json, setJson] = useState<NodeData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [previewMode, setPreviewMode] = useState<"structure" | "design">("structure");
 
   const slugRef = useRef("frame");
 
@@ -226,34 +194,38 @@ export default function App() {
   }
 
   const slug = slugRef.current;
+  const previewJson = previewMode === "structure" ? buildStructure(json) : buildDesign(json);
 
   return (
     <div style={{ padding: 12, background: "#1e1e1e", color: "#d4d4d4" }}>
       <div style={{ marginBottom: 8, fontWeight: 700 }}>{frameName}</div>
 
-      <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
-        <button onClick={() => downloadJson(json, `${slug}.json`)}>Raw</button>
+      <button
+        style={{ color: "#61afef" }}
+        onClick={() => downloadJson(buildStructure(json), `${slug}_structure.json`)}
+      >
+        Structure
+      </button>
+
+      <button
+        style={{ color: "#98c379", marginLeft: 8 }}
+        onClick={() => downloadJson(buildDesign(json), `${slug}_design.json`)}
+      >
+        Design
+      </button>
+
+      <div style={{ marginTop: 8 }}>
         <button
-          onClick={() =>
-            downloadJson(pickKeys(json, STRUCTURE_KEYS), `${slug}_structure.json`)
-          }
+          style={{ color: previewMode === "structure" ? "#61afef" : "#d4d4d4" }}
+          onClick={() => setPreviewMode("structure")}
         >
-          Structure
+          Preview Structure
         </button>
         <button
-          onClick={() =>
-            downloadJson(pickKeys(json, DESIGN_KEYS), `${slug}_design.json`)
-          }
+          style={{ color: previewMode === "design" ? "#98c379" : "#d4d4d4", marginLeft: 8 }}
+          onClick={() => setPreviewMode("design")}
         >
-          Design
-        </button>
-        <button
-          style={{ color: "#e06c75" }}
-          onClick={() =>
-            downloadJson(pickQAKeys(json), `${slug}_qa.json`)
-          }
-        >
-          QA
+          Preview Design
         </button>
       </div>
 
@@ -261,18 +233,13 @@ export default function App() {
         style={{
           background: "#111",
           padding: 8,
+          marginTop: 8,
           maxHeight: 300,
           overflow: "auto",
         }}
       >
-        {JSON.stringify(json, null, 2)}
+        {JSON.stringify(previewJson, null, 2)}
       </pre>
-
-      {json.fills?.map((fill: any, i: number) =>
-        fill.type === "IMAGE" ? (
-          <ImagePlaceholder key={i} slot={fill.imageSlot} />
-        ) : null
-      )}
 
       {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
