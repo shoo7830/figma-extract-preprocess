@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
 Figma Extract — REST API 기반 JSON 추출 스크립트
-플러그인 없이 Figma URL로 structure/design/qa JSON을 추출합니다.
+플러그인 없이 Figma URL로 structure/design JSON을 추출합니다.
 """
 
 import argparse
 import json
 import os
 import re
+import ssl
 import sys
 import urllib.request
 import urllib.error
+import urllib.parse
 from pathlib import Path
 
 
@@ -39,14 +41,7 @@ DESIGN_KEYS = {
     "fontName", "fontSize", "fontWeight",
     "letterSpacing", "lineHeight",
     "textAlignHorizontal", "textAlignVertical",
-    "characters",
-    "children",
-}
-
-QA_KEYS = {
-    "name", "type",
-    "width", "height",
-    "fills",
+    "characters", "styledTextSegments",
     "children",
 }
 
@@ -58,13 +53,11 @@ def parse_figma_url(url: str) -> tuple[str, str]:
     Figma URL에서 fileKey와 nodeId 추출.
     node-id는 URL에서 1-23 형식 → API용 1:23 형식으로 변환.
     """
-    # fileKey 추출
     match = re.search(r"/(?:design|file)/([A-Za-z0-9]+)", url)
     if not match:
         raise ValueError(f"Figma URL에서 fileKey를 찾을 수 없습니다: {url}")
     file_key = match.group(1)
 
-    # nodeId 추출
     match = re.search(r"node-id=([^&]+)", url)
     if not match:
         raise ValueError("URL에 node-id가 없습니다. Figma에서 프레임을 선택 후 Copy link 하세요.")
@@ -78,8 +71,11 @@ def parse_figma_url(url: str) -> tuple[str, str]:
 def figma_get(path: str, token: str) -> dict:
     url = f"https://api.figma.com/v1{path}"
     req = urllib.request.Request(url, headers={"X-Figma-Token": token})
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
     try:
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, context=ctx) as resp:
             return json.loads(resp.read())
     except urllib.error.HTTPError as e:
         body = e.read().decode()
@@ -88,10 +84,9 @@ def figma_get(path: str, token: str) -> dict:
 
 def fetch_node(file_key: str, node_id: str, token: str) -> dict:
     encoded = urllib.parse.quote(node_id, safe="")
-    data = figma_get(f"/files/{file_key}/nodes?ids={encoded}", token)
+    data = figma_get(f"/files/{file_key}/nodes?ids={encoded}&geometry=paths", token)
     nodes = data.get("nodes", {})
 
-    # node_id 키 탐색 (1:23 또는 I1:23 형식 대응)
     for key in [node_id, node_id.replace(":", "-")]:
         if key in nodes:
             return nodes[key]["document"]
@@ -107,8 +102,9 @@ def normalize_slot_id(node: dict) -> str:
 
 
 def transform_image_fill(node: dict) -> dict:
-    width = round(node.get("width") or 0)
-    height = round(node.get("height") or 0)
+    bbox = node.get("absoluteBoundingBox") or {}
+    width = round(bbox.get("width") or 0)
+    height = round(bbox.get("height") or 0)
     return {
         "type": "IMAGE",
         "imageSlot": {
@@ -120,37 +116,35 @@ def transform_image_fill(node: dict) -> dict:
     }
 
 
-def pick_keys(node: dict, keys: set) -> dict:
+def pick_keys(node: dict, keys: set, root_bbox: dict = None) -> dict:
     result = {}
+
+    # absoluteBoundingBox → 상대 좌표(x/y) + 크기(width/height) 매핑
+    bbox = node.get("absoluteBoundingBox")
+    if bbox:
+        if root_bbox is None:
+            root_bbox = bbox
+        if "x" in keys:
+            result["x"] = round(bbox["x"] - root_bbox["x"])
+        if "y" in keys:
+            result["y"] = round(bbox["y"] - root_bbox["y"])
+        if "width" in keys:
+            result["width"] = round(bbox["width"])
+        if "height" in keys:
+            result["height"] = round(bbox["height"])
+
     for k, v in node.items():
         if k not in keys:
             continue
+        if k in ("x", "y", "width", "height"):
+            continue  # 위에서 bbox로 처리
         if k == "fills" and isinstance(v, list):
             result["fills"] = [
                 transform_image_fill(node) if f.get("type") == "IMAGE" else f
                 for f in v
             ]
         elif k == "children" and isinstance(v, list):
-            result["children"] = [pick_keys(child, keys) for child in v]
-        else:
-            result[k] = v
-    return result
-
-
-def pick_qa_keys(node: dict) -> dict:
-    result = {}
-    for k, v in node.items():
-        if k not in QA_KEYS:
-            continue
-        if k == "fills" and isinstance(v, list):
-            slots = [
-                transform_image_fill(node)["imageSlot"]
-                for f in v if f.get("type") == "IMAGE"
-            ]
-            if slots:
-                result["fills"] = slots
-        elif k == "children" and isinstance(v, list):
-            result["children"] = [pick_qa_keys(child) for child in v]
+            result["children"] = [pick_keys(child, keys, root_bbox) for child in v]
         else:
             result[k] = v
     return result
@@ -168,15 +162,13 @@ def save_json(data: dict, path: Path):
 # ─── 메인 ─────────────────────────────────────────────────────────────────────
 
 def main():
-    import urllib.parse  # fetch_node에서 사용
-
     parser = argparse.ArgumentParser(description="Figma REST API JSON 추출기")
     parser.add_argument("--url", required=True, help="Figma 프레임 URL")
     parser.add_argument("--output", default=".", help="저장 디렉토리 (기본: 현재 디렉토리)")
     parser.add_argument(
         "--types",
-        default="structure,design,qa",
-        help="추출할 JSON 종류 (쉼표 구분, 기본: structure,design,qa)",
+        default="structure,design",
+        help="추출할 JSON 종류 (쉼표 구분, 기본: structure,design)",
     )
     args = parser.parse_args()
 
@@ -189,26 +181,24 @@ def main():
     types = {t.strip() for t in args.types.split(",")}
     output_dir = Path(args.output)
 
-    print(f"URL 파싱 중...")
+    print("URL 파싱 중...")
     file_key, node_id = parse_figma_url(args.url)
     print(f"  fileKey: {file_key}")
     print(f"  nodeId:  {node_id}")
 
-    print(f"Figma API 호출 중...")
+    print("Figma API 호출 중...")
     node = fetch_node(file_key, node_id, token)
     frame_name = node.get("name", "frame")
     slug = re.sub(r"[^a-zA-Z0-9가-힣_\-]", "_", frame_name)
     print(f"  프레임: {frame_name}")
 
-    print(f"JSON 생성 중...")
+    print("JSON 생성 중...")
     if "structure" in types:
         save_json(pick_keys(node, STRUCTURE_KEYS), output_dir / f"{slug}_structure.json")
     if "design" in types:
         save_json(pick_keys(node, DESIGN_KEYS), output_dir / f"{slug}_design.json")
-    if "qa" in types:
-        save_json(pick_qa_keys(node), output_dir / f"{slug}_qa.json")
 
-    print(f"\n완료!")
+    print("\n완료!")
 
 
 if __name__ == "__main__":
