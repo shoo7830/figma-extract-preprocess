@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Figma Extract — REST API 기반 JSON 추출 스크립트
-플러그인 없이 Figma URL로 structure/design JSON을 추출합니다.
+플러그인 없이 Figma URL로 structure/design/tokens/manifest JSON을 추출합니다.
 """
 
 import argparse
@@ -19,7 +19,7 @@ from pathlib import Path
 # ─── KEY SETS (App.tsx와 동일) ────────────────────────────────────────────────
 
 STRUCTURE_KEYS = {
-    "name", "type", "visible",
+    "name", "type", "visible", "description",
     "x", "y", "width", "height", "rotation",
     "layoutMode", "layoutAlign", "layoutGrow", "layoutPositioning", "layoutWrap",
     "layoutSizingHorizontal", "layoutSizingVertical",
@@ -33,7 +33,7 @@ STRUCTURE_KEYS = {
 }
 
 DESIGN_KEYS = {
-    "name", "type",
+    "name", "type", "description",
     "fills",
     "strokes", "strokeWeight", "strokeAlign",
     "effects", "opacity",
@@ -82,19 +82,73 @@ def figma_get(path: str, token: str) -> dict:
         raise RuntimeError(f"Figma API 오류 {e.code}: {body}")
 
 
-def fetch_node(file_key: str, node_id: str, token: str) -> dict:
+def fetch_image_url(file_key: str, node_id: str, token: str, scale: int = 2) -> str:
+    """Figma 이미지 export API로 프레임 PNG URL 조회."""
+    encoded = urllib.parse.quote(node_id, safe="")
+    data = figma_get(f"/images/{file_key}?ids={encoded}&format=png&scale={scale}", token)
+    if data.get("err"):
+        raise RuntimeError(f"Figma 이미지 export 오류: {data['err']}")
+    images = data.get("images", {})
+    url = images.get(node_id) or images.get(node_id.replace(":", "-"))
+    if not url:
+        raise RuntimeError(f"이미지 URL을 찾을 수 없습니다. 응답 키: {list(images.keys())}")
+    return url
+
+
+def download_file(url: str, path: Path) -> None:
+    """URL에서 바이너리 파일 다운로드."""
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    with urllib.request.urlopen(url, context=ctx) as resp:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(resp.read())
+    size_kb = path.stat().st_size / 1024
+    print(f"  저장: {path}  ({size_kb:.1f} KB)")
+
+
+def fetch_node(file_key: str, node_id: str, token: str) -> tuple[dict, dict]:
+    """
+    노드 문서와 스타일 맵을 함께 반환.
+    styles_map: {styleId → {name, styleType, ...}}
+    """
     encoded = urllib.parse.quote(node_id, safe="")
     data = figma_get(f"/files/{file_key}/nodes?ids={encoded}&geometry=paths", token)
     nodes = data.get("nodes", {})
 
+    node_data = None
     for key in [node_id, node_id.replace(":", "-")]:
         if key in nodes:
-            return nodes[key]["document"]
+            node_data = nodes[key]
+            break
 
-    raise RuntimeError(f"노드를 찾을 수 없습니다: {node_id}\n사용 가능한 키: {list(nodes.keys())}")
+    if not node_data:
+        raise RuntimeError(f"노드를 찾을 수 없습니다: {node_id}\n사용 가능한 키: {list(nodes.keys())}")
+
+    # styles는 노드 응답 내 스타일 레지스트리 (styleId → {name, styleType, ...})
+    styles_map = node_data.get("styles", {})
+    return node_data["document"], styles_map
 
 
-# ─── 변환 함수 (App.tsx 로직 재현) ────────────────────────────────────────────
+# ─── 컴포넌트 맵 ──────────────────────────────────────────────────────────────
+
+def load_component_map(path: str) -> dict:
+    """
+    컴포넌트 이름 → 프로덕션 코드 매핑 JSON 로드.
+    형식 예시:
+    {
+      "Button/Primary": {
+        "import": "import { Button } from '@/components/Button'",
+        "usage": "<Button variant='primary'>{label}</Button>",
+        "props": ["variant", "size", "disabled"]
+      }
+    }
+    """
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+# ─── 변환 함수 ────────────────────────────────────────────────────────────────
 
 def normalize_slot_id(node: dict) -> str:
     name = node.get("name", "") or ""
@@ -116,8 +170,29 @@ def transform_image_fill(node: dict) -> dict:
     }
 
 
-def pick_keys(node: dict, keys: set, root_bbox: dict = None) -> dict:
+def resolve_token_name(style_key: str, node_styles: dict, styles_map: dict) -> str | None:
+    """노드의 styles 필드에서 특정 속성(fill, text, effect)에 해당하는 토큰 이름 반환."""
+    style_id = node_styles.get(style_key)
+    if style_id and style_id in styles_map:
+        return styles_map[style_id].get("name")
+    return None
+
+
+def pick_keys(
+    node: dict,
+    keys: set,
+    root_bbox: dict = None,
+    styles_map: dict = None,
+    component_map: dict = None,
+) -> dict:
     result = {}
+    node_styles = node.get("styles", {})  # 이 노드에 적용된 스타일 참조 (styleKey → styleId)
+
+    # Code Connect: 컴포넌트 이름이 맵에 있으면 프로덕션 코드 참조 주입
+    if component_map:
+        name = node.get("name", "")
+        if name in component_map:
+            result["_codeConnect"] = component_map[name]
 
     # absoluteBoundingBox → 상대 좌표(x/y) + 크기(width/height) 매핑
     bbox = node.get("absoluteBoundingBox")
@@ -139,20 +214,98 @@ def pick_keys(node: dict, keys: set, root_bbox: dict = None) -> dict:
         if k in ("x", "y", "width", "height"):
             continue  # 위에서 bbox로 처리
         if k == "fills" and isinstance(v, list):
-            result["fills"] = [
-                transform_image_fill(node) if f.get("type") == "IMAGE" else f
-                for f in v
-            ]
+            fill_token = resolve_token_name("fill", node_styles, styles_map) if styles_map else None
+            processed = []
+            for f in v:
+                if f.get("type") == "IMAGE":
+                    processed.append(transform_image_fill(node))
+                else:
+                    fill = dict(f)
+                    if fill_token:
+                        fill["_tokenName"] = fill_token
+                    processed.append(fill)
+            result["fills"] = processed
         elif k == "children" and isinstance(v, list):
-            result["children"] = [pick_keys(child, keys, root_bbox) for child in v]
+            result["children"] = [
+                pick_keys(child, keys, root_bbox, styles_map, component_map)
+                for child in v
+            ]
         else:
             result[k] = v
+
+    # 텍스트 스타일 토큰 이름 주입 (design JSON에서 유용)
+    if styles_map and node.get("type") == "TEXT":
+        text_token = resolve_token_name("text", node_styles, styles_map)
+        if text_token:
+            result["_textToken"] = text_token
+
     return result
+
+
+# ─── 토큰 요약 ────────────────────────────────────────────────────────────────
+
+def collect_tokens(node: dict, styles_map: dict) -> dict:
+    """
+    노드 트리에서 사용된 스타일 토큰을 수집해 요약 반환.
+    AI에게 "이 프레임에서 사용된 토큰 목록"을 제공하는 용도.
+    반환: {colors: {tokenName: fill}, typography: {tokenName: props}, effects: {tokenName: []}}
+    """
+    tokens: dict = {"colors": {}, "typography": {}, "effects": {}}
+
+    def walk(n: dict) -> None:
+        node_styles = n.get("styles", {})
+        for style_key, style_id in node_styles.items():
+            if style_id not in styles_map:
+                continue
+            info = styles_map[style_id]
+            name = info.get("name", style_id)
+            style_type = info.get("styleType", "")
+
+            if style_type == "FILL" and name not in tokens["colors"]:
+                solid_fills = [f for f in n.get("fills", []) if f.get("type") == "SOLID"]
+                if solid_fills:
+                    tokens["colors"][name] = solid_fills[0]
+
+            elif style_type == "TEXT" and name not in tokens["typography"]:
+                tokens["typography"][name] = {
+                    k: n[k]
+                    for k in ("fontName", "fontSize", "fontWeight", "lineHeight", "letterSpacing")
+                    if k in n
+                }
+
+            elif style_type == "EFFECT" and name not in tokens["effects"]:
+                tokens["effects"][name] = n.get("effects", [])
+
+        for child in n.get("children", []):
+            walk(child)
+
+    walk(node)
+    return tokens
+
+
+# ─── manifest (텍스트 추출) ───────────────────────────────────────────────────
+
+def collect_manifest(node: dict) -> list[dict]:
+    """
+    모든 TEXT 노드의 텍스트 콘텐츠를 수집.
+    ai-prompt-guide.md의 텍스트 누락 검수 프롬프트에 사용.
+    반환: [{name, characters}]
+    """
+    results = []
+
+    def walk(n: dict) -> None:
+        if n.get("type") == "TEXT" and n.get("characters"):
+            results.append({"name": n.get("name", ""), "characters": n["characters"]})
+        for child in n.get("children", []):
+            walk(child)
+
+    walk(node)
+    return results
 
 
 # ─── 저장 ─────────────────────────────────────────────────────────────────────
 
-def save_json(data: dict, path: Path):
+def save_json(data: dict | list, path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2))
     size_kb = path.stat().st_size / 1024
@@ -164,11 +317,17 @@ def save_json(data: dict, path: Path):
 def main():
     parser = argparse.ArgumentParser(description="Figma REST API JSON 추출기")
     parser.add_argument("--url", required=True, help="Figma 프레임 URL")
-    parser.add_argument("--output", default=".", help="저장 디렉토리 (기본: 현재 디렉토리)")
+    parser.add_argument("--output", default="./figma", help="JSON 저장 디렉토리 (기본: ./figma)")
+    parser.add_argument("--img-output", default="./output", help="이미지 저장 디렉토리 (기본: ./output)")
     parser.add_argument(
         "--types",
         default="structure,design",
-        help="추출할 JSON 종류 (쉼표 구분, 기본: structure,design)",
+        help="추출할 종류 (쉼표 구분: structure,design,tokens,manifest,png)",
+    )
+    parser.add_argument(
+        "--component-map",
+        metavar="FILE",
+        help="컴포넌트 이름 → 프로덕션 코드 매핑 JSON 파일 경로 (Code Connect 대용)",
     )
     args = parser.parse_args()
 
@@ -180,6 +339,12 @@ def main():
 
     types = {t.strip() for t in args.types.split(",")}
     output_dir = Path(args.output)
+    img_output_dir = Path(args.img_output)
+
+    component_map = {}
+    if args.component_map:
+        component_map = load_component_map(args.component_map)
+        print(f"  컴포넌트 맵 로드: {len(component_map)}개 항목")
 
     print("URL 파싱 중...")
     file_key, node_id = parse_figma_url(args.url)
@@ -187,16 +352,37 @@ def main():
     print(f"  nodeId:  {node_id}")
 
     print("Figma API 호출 중...")
-    node = fetch_node(file_key, node_id, token)
+    node, styles_map = fetch_node(file_key, node_id, token)
     frame_name = node.get("name", "frame")
     slug = re.sub(r"[^a-zA-Z0-9가-힣_\-]", "_", frame_name)
     print(f"  프레임: {frame_name}")
+    if styles_map:
+        print(f"  스타일 토큰: {len(styles_map)}개 감지")
 
     print("JSON 생성 중...")
     if "structure" in types:
-        save_json(pick_keys(node, STRUCTURE_KEYS), output_dir / f"{slug}_structure.json")
+        data = pick_keys(node, STRUCTURE_KEYS, styles_map=styles_map, component_map=component_map)
+        save_json(data, output_dir / f"{slug}_structure.json")
+
     if "design" in types:
-        save_json(pick_keys(node, DESIGN_KEYS), output_dir / f"{slug}_design.json")
+        data = pick_keys(node, DESIGN_KEYS, styles_map=styles_map, component_map=component_map)
+        save_json(data, output_dir / f"{slug}_design.json")
+
+    if "tokens" in types:
+        if styles_map:
+            token_data = collect_tokens(node, styles_map)
+            save_json(token_data, output_dir / f"{slug}_tokens.json")
+        else:
+            print("  경고: 스타일 토큰 없음 (로컬 스타일 미사용 파일).")
+
+    if "manifest" in types:
+        manifest = collect_manifest(node)
+        save_json(manifest, output_dir / f"{slug}_manifest.json")
+
+    if "png" in types:
+        print("Figma 이미지 export 중...")
+        img_url = fetch_image_url(file_key, node_id, token)
+        download_file(img_url, img_output_dir / f"{slug}.png")
 
     print("\n완료!")
 
