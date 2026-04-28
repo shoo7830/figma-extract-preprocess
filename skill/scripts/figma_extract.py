@@ -14,6 +14,7 @@ import urllib.request
 import urllib.error
 import urllib.parse
 from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Union
 
 
 # ─── KEY SETS (App.tsx와 동일) ────────────────────────────────────────────────
@@ -42,13 +43,16 @@ DESIGN_KEYS = {
     "letterSpacing", "lineHeight",
     "textAlignHorizontal", "textAlignVertical",
     "characters", "styledTextSegments",
+    "style",  # TEXT 노드 타이포그래피 (fontSize, fontWeight, lineHeightPx 등)
     "children",
 }
+
+RAW_KEYS = STRUCTURE_KEYS | DESIGN_KEYS
 
 
 # ─── URL 파싱 ──────────────────────────────────────────────────────────────────
 
-def parse_figma_url(url: str) -> tuple[str, str]:
+def parse_figma_url(url: str) -> Tuple[str, str]:
     """
     Figma URL에서 fileKey와 nodeId 추출.
     node-id는 URL에서 1-23 형식 → API용 1:23 형식으로 변환.
@@ -107,7 +111,7 @@ def download_file(url: str, path: Path) -> None:
     print(f"  저장: {path}  ({size_kb:.1f} KB)")
 
 
-def fetch_node(file_key: str, node_id: str, token: str) -> tuple[dict, dict]:
+def fetch_node(file_key: str, node_id: str, token: str) -> Tuple[dict, dict]:
     """
     노드 문서와 스타일 맵을 함께 반환.
     styles_map: {styleId → {name, styleType, ...}}
@@ -170,7 +174,7 @@ def transform_image_fill(node: dict) -> dict:
     }
 
 
-def resolve_token_name(style_key: str, node_styles: dict, styles_map: dict) -> str | None:
+def resolve_token_name(style_key: str, node_styles: dict, styles_map: dict) -> Optional[str]:
     """노드의 styles 필드에서 특정 속성(fill, text, effect)에 해당하는 토큰 이름 반환."""
     style_id = node_styles.get(style_key)
     if style_id and style_id in styles_map:
@@ -285,7 +289,7 @@ def collect_tokens(node: dict, styles_map: dict) -> dict:
 
 # ─── manifest (텍스트 추출) ───────────────────────────────────────────────────
 
-def collect_manifest(node: dict) -> list[dict]:
+def collect_manifest(node: dict) -> List[dict]:
     """
     모든 TEXT 노드의 텍스트 콘텐츠를 수집.
     ai-prompt-guide.md의 텍스트 누락 검수 프롬프트에 사용.
@@ -305,7 +309,7 @@ def collect_manifest(node: dict) -> list[dict]:
 
 # ─── 저장 ─────────────────────────────────────────────────────────────────────
 
-def save_json(data: dict | list, path: Path):
+def save_json(data: Union[dict, list], path: Path):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2))
     size_kb = path.stat().st_size / 1024
@@ -316,7 +320,7 @@ def save_json(data: dict | list, path: Path):
 
 def main():
     parser = argparse.ArgumentParser(description="Figma REST API JSON 추출기")
-    parser.add_argument("--url", required=True, help="Figma 프레임 URL")
+    parser.add_argument("--url", required=True, action="append", help="Figma 프레임 URL (여러 번 사용 가능)")
     parser.add_argument("--output", default="./figma", help="JSON 저장 디렉토리 (기본: ./figma)")
     parser.add_argument("--img-output", default="./output", help="이미지 저장 디렉토리 (기본: ./output)")
     parser.add_argument(
@@ -346,43 +350,51 @@ def main():
         component_map = load_component_map(args.component_map)
         print(f"  컴포넌트 맵 로드: {len(component_map)}개 항목")
 
-    print("URL 파싱 중...")
-    file_key, node_id = parse_figma_url(args.url)
-    print(f"  fileKey: {file_key}")
-    print(f"  nodeId:  {node_id}")
+    for i, url in enumerate(args.url, 1):
+        if len(args.url) > 1:
+            print(f"\n[{i}/{len(args.url)}] {url}")
 
-    print("Figma API 호출 중...")
-    node, styles_map = fetch_node(file_key, node_id, token)
-    frame_name = node.get("name", "frame")
-    slug = re.sub(r"[^a-zA-Z0-9가-힣_\-]", "_", frame_name)
-    print(f"  프레임: {frame_name}")
-    if styles_map:
-        print(f"  스타일 토큰: {len(styles_map)}개 감지")
+        print("URL 파싱 중...")
+        file_key, node_id = parse_figma_url(url)
+        print(f"  fileKey: {file_key}")
+        print(f"  nodeId:  {node_id}")
 
-    print("JSON 생성 중...")
-    if "structure" in types:
-        data = pick_keys(node, STRUCTURE_KEYS, styles_map=styles_map, component_map=component_map)
-        save_json(data, output_dir / f"{slug}_structure.json")
-
-    if "design" in types:
-        data = pick_keys(node, DESIGN_KEYS, styles_map=styles_map, component_map=component_map)
-        save_json(data, output_dir / f"{slug}_design.json")
-
-    if "tokens" in types:
+        print("Figma API 호출 중...")
+        node, styles_map = fetch_node(file_key, node_id, token)
+        frame_name = node.get("name", "frame")
+        slug = re.sub(r"[^a-zA-Z0-9가-힣_\-]", "_", frame_name)
+        print(f"  프레임: {frame_name}")
         if styles_map:
-            token_data = collect_tokens(node, styles_map)
-            save_json(token_data, output_dir / f"{slug}_tokens.json")
-        else:
-            print("  경고: 스타일 토큰 없음 (로컬 스타일 미사용 파일).")
+            print(f"  스타일 토큰: {len(styles_map)}개 감지")
 
-    if "manifest" in types:
-        manifest = collect_manifest(node)
-        save_json(manifest, output_dir / f"{slug}_manifest.json")
+        print("JSON 생성 중...")
+        if "raw" in types:
+            data = pick_keys(node, RAW_KEYS, styles_map=styles_map, component_map=component_map)
+            save_json(data, output_dir / f"{slug}_raw.json")
 
-    if "png" in types:
-        print("Figma 이미지 export 중...")
-        img_url = fetch_image_url(file_key, node_id, token)
-        download_file(img_url, img_output_dir / f"{slug}.png")
+        if "structure" in types:
+            data = pick_keys(node, STRUCTURE_KEYS, styles_map=styles_map, component_map=component_map)
+            save_json(data, output_dir / f"{slug}_structure.json")
+
+        if "design" in types:
+            data = pick_keys(node, DESIGN_KEYS, styles_map=styles_map, component_map=component_map)
+            save_json(data, output_dir / f"{slug}_design.json")
+
+        if "tokens" in types:
+            if styles_map:
+                token_data = collect_tokens(node, styles_map)
+                save_json(token_data, output_dir / f"{slug}_tokens.json")
+            else:
+                print("  경고: 스타일 토큰 없음 (로컬 스타일 미사용 파일).")
+
+        if "manifest" in types:
+            manifest = collect_manifest(node)
+            save_json(manifest, output_dir / f"{slug}_manifest.json")
+
+        if "png" in types:
+            print("Figma 이미지 export 중...")
+            img_url = fetch_image_url(file_key, node_id, token)
+            download_file(img_url, img_output_dir / f"{slug}.png")
 
     print("\n완료!")
 

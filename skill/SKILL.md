@@ -1,6 +1,6 @@
 ---
 name: figma-extract
-description: Figma REST API로 선택한 프레임의 JSON을 추출한다. 플러그인 없이 Figma URL만으로 structure/design/tokens/manifest JSON을 로컬에 저장한다. "figma extract", "피그마 JSON 추출", "figma-extract" 등의 요청 시 사용.
+description: Figma REST API로 선택한 프레임의 JSON을 추출한다. 플러그인 없이 Figma URL만으로 raw/structure/design/tokens/manifest JSON을 로컬에 저장한다. "figma extract", "피그마 JSON 추출", "피그마 raw json", "figma-extract" 등의 요청 시 사용.
 ---
 
 # Figma Extract
@@ -18,17 +18,18 @@ Figma REST API를 사용해 플러그인 없이 프레임 JSON을 추출합니�
 ```bash
 python3 ~/.claude/skills/figma-extract/scripts/figma_extract.py \
   --url "https://www.figma.com/design/ABC123/MyFile?node-id=1-23" \
-  --output ./output
+  --types raw \
+  --output ./figma
 ```
 
 ### 옵션
 
 | 옵션 | 설명 | 기본값 |
 |------|------|--------|
-| `--url` | Figma 프레임 URL (필수) | - |
+| `--url` | Figma 프레임 URL (여러 번 사용 가능) | - |
 | `--output` | JSON 저장 디렉토리 | `./figma` |
 | `--img-output` | 이미지(PNG) 저장 디렉토리 | `./output` |
-| `--types` | 추출할 종류 (structure,design,tokens,manifest,png) | structure,design |
+| `--types` | 추출할 종류 (raw,structure,design,tokens,manifest,png) | raw |
 | `--component-map` | 컴포넌트 이름 → 프로덕션 코드 매핑 JSON 파일 경로 | - |
 
 ## 워크플로우
@@ -41,26 +42,43 @@ python3 ~/.claude/skills/figma-extract/scripts/figma_extract.py \
 
 | 파일 | `--types` 값 | 내용 |
 |------|-------------|------|
+| `*_raw.json` | `raw` | structure + design 합집합 (레이아웃·스타일 통합 단일 파일) |
 | `*_structure.json` | `structure` | 레이아웃 뼈대 (크기, 위치, AutoLayout) |
 | `*_design.json` | `design` | 시각 스타일 (색상, 폰트, 그림자, styledTextSegments) |
 | `*_tokens.json` | `tokens` | 프레임에서 사용된 디자인 토큰 목록 (색상·타이포·이펙트) |
 | `*_manifest.json` | `manifest` | 모든 텍스트 콘텐츠 목록 (텍스트 누락 검수용) |
 | `*.png` | `png` | Figma 프레임 PNG (시각 QA용, @2x 해상도) |
 
+### 반응형 (MB + PC 동시 추출)
+
+```bash
+python3 ~/.claude/skills/figma-extract/scripts/figma_extract.py \
+  --url "https://www.figma.com/design/ABC123/MyFile?node-id=1-23" \
+  --url "https://www.figma.com/design/ABC123/MyFile?node-id=4-56" \
+  --types raw
+```
+
+프레임 이름이 `event_mb`, `event_pc`이면 자동으로:
+
+```
+figma/
+  event_mb_raw.json
+  event_pc_raw.json
+```
+
 ### 전체 추출 예시
 
 ```bash
 python3 ~/.claude/skills/figma-extract/scripts/figma_extract.py \
   --url "https://www.figma.com/design/ABC123/MyFile?node-id=1-23" \
-  --types structure,design,tokens,manifest,png
+  --types raw,tokens,manifest,png
 ```
 
 기본 경로로 실행하면 프로젝트 루트에 아래 구조로 저장됩니다:
 
 ```
 ./figma/
-  CardList_structure.json
-  CardList_design.json
+  CardList_raw.json
   CardList_tokens.json
   CardList_manifest.json
 ./output/
@@ -169,12 +187,50 @@ python3 ~/.claude/skills/figma-extract/scripts/figma_extract.py \
 
 ---
 
+## AI 구현 프롬프트
+
+### 단일 (모바일)
+
+```
+@figma/{slug}_raw.json 으로 HTML 구조와 CSS를 만들어줘
+@pages/event/{slug}/index.vue 에 작업
+
+규칙:
+- px 수치 그대로 사용 (rem 변환 금지)
+- 기준 프레임 너비: 390px (모바일)
+- 한국어 텍스트에 word-break: keep-all 적용
+- 배경 이미지는 플레이스홀더로 처리
+```
+
+### 반응형 (MB + PC)
+
+```
+MB: @figma/{slug}_mb_raw.json
+PC: @figma/{slug}_pc_raw.json
+@pages/event/{slug}/index.vue 에 반응형으로 구현해줘.
+
+규칙:
+- 모바일 우선, 브레이크포인트: @media (min-width: 768px)
+- px 수치 그대로, word-break: keep-all
+- 배경 이미지는 플레이스홀더로 처리
+```
+
+### 텍스트 누락 검수
+
+```
+@figma/{slug}_manifest.json 대조해서
+@pages/event/{slug}/index.vue 의 텍스트 누락 여부 확인해줘.
+수정은 하지 말고 리포트만.
+```
+
+---
+
 ## 시각 QA 파이프라인 (이벤트 페이지)
 
 PNG를 함께 추출하면 코드 생성 후 시각적 일치 여부를 자동으로 검수할 수 있습니다.
 
 ```
-figma_extract.py --types structure,design,png
+figma_extract.py --types raw,png
         ↓
 executor 에이전트 → HTML/CSS 생성
         ↓
