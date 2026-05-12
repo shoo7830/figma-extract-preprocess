@@ -1,0 +1,25 @@
+# Contact us — tb (1024×518)
+# y=5036~5554
+
+## 섹션 트리
+[FRAME] Contact us  1024×518  @(0,5036)
+  fill: image  slot=contact-us  path=./images/contact-us.png
+  layout: VERTICAL  gap=70  padding=[100,20,100,20]
+  [FRAME] title  984×318  @(20,5136)
+    layout: VERTICAL  gap=70
+    [TEXT] Contact us  984×28  @(20,5136)
+      text: "Contact us"
+      font: size=20px w=700 lh=28.0px align=CENTER
+      fill: #6d4df4
+    [TEXT] 하나의 플랫폼에서 펼쳐지는 AI 여정 Gabia AI Platform과 함께하세요  984×100  @(20,5234)
+      text: "하나의 플랫폼에서 펼쳐지는 AI 여정↵Gabia AI Platform과 함께하세요"
+      font: size=36px w=500 lh=50.4px align=CENTER
+      fill: #ffffff
+    [INSTANCE] Primary button  280×50  @(372,5404)
+      fill: #000000
+      borderRadius: 12px
+      layout: HORIZONTAL  gap=12.745098114013672  padding=[20,20]
+      [TEXT] 3개월 무료 이용하기  87×19  @(468,5420)
+        text: "도입 문의하기"
+        font: size=16px w=700 lh=19.1px align=CENTER
+        fill: #ffffff

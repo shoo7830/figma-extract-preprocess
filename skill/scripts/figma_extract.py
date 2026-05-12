@@ -159,19 +159,173 @@ def normalize_slot_id(node: dict) -> str:
     return re.sub(r"[^a-z0-9\-]", "", name.lower().replace(" ", "-")) or "image-slot"
 
 
-def transform_image_fill(node: dict) -> dict:
+def transform_image_fill(fill: dict, node: dict) -> dict:
     bbox = node.get("absoluteBoundingBox") or {}
     width = round(bbox.get("width") or 0)
     height = round(bbox.get("height") or 0)
-    return {
-        "type": "IMAGE",
-        "imageSlot": {
-            "slotId": normalize_slot_id(node),
-            "role": "unknown",
-            "expectedSize": {"width": width, "height": height},
-            "aspectRatio": round(width / height, 4) if height else 1,
-        },
+    slot: dict = {
+        "slotId": normalize_slot_id(node),
+        "role": "unknown",
+        "expectedSize": {"width": width, "height": height},
+        "aspectRatio": round(width / height, 4) if height else 1,
     }
+    if fill.get("imageRef"):
+        slot["imageRef"] = fill["imageRef"]
+    return {"type": "IMAGE", "imageSlot": slot}
+
+
+def collect_image_refs(node: dict) -> dict:
+    """노드 트리를 순회해 {imageRef: slotId} 매핑을 반환."""
+    refs: dict = {}
+
+    def walk(n: dict) -> None:
+        for f in n.get("fills", []):
+            if f.get("type") == "IMAGE" and f.get("imageRef"):
+                refs[f["imageRef"]] = normalize_slot_id(n)
+        for child in n.get("children", []):
+            walk(child)
+
+    walk(node)
+    return refs
+
+
+def fetch_figma_image_urls(file_key: str, token: str) -> dict:
+    """GET /v1/files/{fileKey}/images → {imageRef: cdn_url}"""
+    data = figma_get(f"/files/{file_key}/images", token)
+    if data.get("error"):
+        raise RuntimeError(f"Figma Images API 오류: {data}")
+    return data.get("images", {})
+
+
+def download_image_assets(
+    file_key: str,
+    image_refs: dict,
+    output_dir: Path,
+    token: str,
+) -> dict:
+    """
+    image_refs: {imageRef: slotId}
+    Figma Files Images API로 URL 조회 후 {output_dir}/images/{slotId}.png 저장.
+    반환: {imageRef: actualPath}
+    """
+    if not image_refs:
+        return {}
+
+    print(f"  이미지 에셋 {len(image_refs)}개 다운로드 중...")
+    all_urls = fetch_figma_image_urls(file_key, token)
+    images_dir = output_dir / "images"
+    images_dir.mkdir(parents=True, exist_ok=True)
+
+    ref_to_path: dict = {}
+    used_names: set = set()
+
+    for ref, slot_id in image_refs.items():
+        url = all_urls.get(ref)
+        if not url:
+            print(f"  경고: {slot_id} ({ref[:8]}...) — CDN URL 없음, 건너뜀")
+            continue
+
+        name = slot_id
+        counter = 1
+        while name in used_names:
+            name = f"{slot_id}_{counter}"
+            counter += 1
+        used_names.add(name)
+
+        path = images_dir / f"{name}.png"
+        download_file(url, path)
+        ref_to_path[ref] = str(path)
+
+    return ref_to_path
+
+
+def export_image_node_children(
+    file_key: str,
+    image_node_id: str,
+    output_dir: Path,
+    token: str,
+) -> dict:
+    """
+    이미지 모음 프레임의 자식 노드를 개별 PNG로 내보냄.
+    Figma 렌더 API (GET /v1/images/{fileKey}?ids=...) 사용.
+    반환: {slotId: actualPath}
+    """
+    print(f"  이미지 모음 노드 조회 중: {image_node_id}")
+    doc, _ = fetch_node(file_key, image_node_id, token)
+    children = doc.get("children", [])
+    if not children:
+        print("  경고: 이미지 모음 노드에 자식이 없습니다.")
+        return {}
+
+    print(f"  자식 노드 {len(children)}개 발견, PNG 내보내기 중...")
+    images_dir = output_dir / "images"
+    images_dir.mkdir(parents=True, exist_ok=True)
+
+    # 노드ID → slotId 매핑 구성
+    id_to_slot: dict = {}
+    for child in children:
+        node_id = child.get("id", "")
+        slot_id = normalize_slot_id(child)
+        id_to_slot[node_id] = slot_id
+
+    # 한 번에 모든 노드 렌더 URL 요청
+    ids_param = urllib.parse.quote(",".join(id_to_slot.keys()), safe="")
+    data = figma_get(f"/images/{file_key}?ids={ids_param}&format=png&scale=2", token)
+    if data.get("err"):
+        raise RuntimeError(f"이미지 렌더 오류: {data['err']}")
+
+    render_urls: dict = data.get("images", {})
+    slot_to_path: dict = {}
+    used_names: set = set()
+
+    for node_id, slot_id in id_to_slot.items():
+        url = render_urls.get(node_id) or render_urls.get(node_id.replace(":", "-"))
+        if not url:
+            print(f"  경고: {slot_id} — 렌더 URL 없음, 건너뜀")
+            continue
+
+        name = slot_id
+        counter = 1
+        while name in used_names:
+            name = f"{slot_id}_{counter}"
+            counter += 1
+        used_names.add(name)
+
+        path = images_dir / f"{name}.png"
+        download_file(url, path)
+        slot_to_path[slot_id] = str(path)
+
+    return slot_to_path
+
+
+def inject_actual_paths_by_slot(data: object, slot_to_path: dict) -> None:
+    """slotId 기반으로 imageSlot.actualPath 주입 (in-place)."""
+    if isinstance(data, dict):
+        if data.get("type") == "IMAGE" and "imageSlot" in data:
+            slot = data["imageSlot"]
+            actual = slot_to_path.get(slot.get("slotId", ""))
+            if actual:
+                slot["actualPath"] = actual
+        for v in data.values():
+            inject_actual_paths_by_slot(v, slot_to_path)
+    elif isinstance(data, list):
+        for item in data:
+            inject_actual_paths_by_slot(item, slot_to_path)
+
+
+def inject_actual_paths(data: object, ref_to_path: dict) -> None:
+    """JSON 트리에서 imageSlot.imageRef를 찾아 actualPath 필드를 주입 (in-place)."""
+    if isinstance(data, dict):
+        if data.get("type") == "IMAGE" and "imageSlot" in data:
+            slot = data["imageSlot"]
+            actual = ref_to_path.get(slot.get("imageRef", ""))
+            if actual:
+                slot["actualPath"] = actual
+        for v in data.values():
+            inject_actual_paths(v, ref_to_path)
+    elif isinstance(data, list):
+        for item in data:
+            inject_actual_paths(item, ref_to_path)
 
 
 def resolve_token_name(style_key: str, node_styles: dict, styles_map: dict) -> Optional[str]:
@@ -222,7 +376,7 @@ def pick_keys(
             processed = []
             for f in v:
                 if f.get("type") == "IMAGE":
-                    processed.append(transform_image_fill(node))
+                    processed.append(transform_image_fill(f, node))
                 else:
                     fill = dict(f)
                     if fill_token:
@@ -326,12 +480,17 @@ def main():
     parser.add_argument(
         "--types",
         default="structure,design",
-        help="추출할 종류 (쉼표 구분: structure,design,tokens,manifest,png)",
+        help="추출할 종류 (쉼표 구분: structure,design,tokens,manifest,png,images)",
     )
     parser.add_argument(
         "--component-map",
         metavar="FILE",
         help="컴포넌트 이름 → 프로덕션 코드 매핑 JSON 파일 경로 (Code Connect 대용)",
+    )
+    parser.add_argument(
+        "--image-node",
+        metavar="URL",
+        help="이미지 모음 Figma 프레임 URL. 자식 노드를 PNG로 내보내 images/ 폴더에 저장.",
     )
     args = parser.parse_args()
 
@@ -350,6 +509,14 @@ def main():
         component_map = load_component_map(args.component_map)
         print(f"  컴포넌트 맵 로드: {len(component_map)}개 항목")
 
+    # --image-node: 이미지 모음 프레임을 한 번만 내보내 모든 시안에 재사용
+    slot_to_path: dict = {}
+    if args.image_node:
+        print("이미지 모음 노드 처리 중...")
+        img_file_key, img_node_id = parse_figma_url(args.image_node)
+        slot_to_path = export_image_node_children(img_file_key, img_node_id, output_dir, token)
+        print(f"  이미지 {len(slot_to_path)}개 저장 완료\n")
+
     for i, url in enumerate(args.url, 1):
         if len(args.url) > 1:
             print(f"\n[{i}/{len(args.url)}] {url}")
@@ -367,17 +534,35 @@ def main():
         if styles_map:
             print(f"  스타일 토큰: {len(styles_map)}개 감지")
 
+        # 이미지 에셋 다운로드 (JSON 생성 전에 실행해야 actualPath 주입 가능)
+        ref_to_path: dict = {}
+        if "images" in types:
+            image_refs = collect_image_refs(node)
+            if image_refs:
+                ref_to_path = download_image_assets(file_key, image_refs, output_dir, token)
+            else:
+                print("  이미지 fill 없음, 다운로드 건너뜀")
+
+        def _inject(d: dict) -> None:
+            if ref_to_path:
+                inject_actual_paths(d, ref_to_path)
+            if slot_to_path:
+                inject_actual_paths_by_slot(d, slot_to_path)
+
         print("JSON 생성 중...")
         if "raw" in types:
             data = pick_keys(node, RAW_KEYS, styles_map=styles_map, component_map=component_map)
+            _inject(data)
             save_json(data, output_dir / f"{slug}_raw.json")
 
         if "structure" in types:
             data = pick_keys(node, STRUCTURE_KEYS, styles_map=styles_map, component_map=component_map)
+            _inject(data)
             save_json(data, output_dir / f"{slug}_structure.json")
 
         if "design" in types:
             data = pick_keys(node, DESIGN_KEYS, styles_map=styles_map, component_map=component_map)
+            _inject(data)
             save_json(data, output_dir / f"{slug}_design.json")
 
         if "tokens" in types:

@@ -1,0 +1,107 @@
+# Solution — mb (375×1122)
+# y=1214~2336
+
+## 섹션 트리
+[FRAME] Solution  375×1122  @(0,1214)
+  fill: gradient_linear [#100334 → #000000]
+  layout: VERTICAL  gap=30  padding=[60,16,60,16]
+  [FRAME] title  343×110  @(16,1274)
+    layout: VERTICAL  gap=20
+    [TEXT] Solution  343×22  @(16,1274)
+      text: "Solution"
+      font: size=16px w=700 lh=22.4px align=CENTER
+      fill: #7959ff
+    [TEXT] 복잡한 문제를 해결한 하나의 플랫폼 Gabia AI Platform  343×68  @(16,1316)
+      text: "복잡한 문제를 해결한 하나의 플랫폼↵Gabia AI Platform"
+      font: size=24px w=500 lh=33.6px align=CENTER
+      fill: #ffffff
+  [FRAME] list  343×862  @(16,1414)
+    layout: VERTICAL  gap=16
+    [FRAME] li  343×200  @(16,1414)
+      fill: image  slot=li  path=./images/li.png
+      borderRadius: 8.381800651550293px
+      layout: VERTICAL  gap=8  padding=[20,20,20,20]
+      [FRAME] text  290×101  @(36,1493)
+        layout: VERTICAL  gap=5.867260456085205
+        [TEXT] Gabia AI Platform  290×24  @(36,1493)
+          text: "Gabia AI Platform"
+          font: size=20px w=500 lh=23.9px align=LEFT
+          fill: #ffffff
+        [TEXT] 머신러닝(ML) 및 대규모 언어 모델(LLM)의 개발-배포-학습을 아우르는 통합 오퍼레이션 환경(MLOps/LLMOps) 제공  290×71  @(36,1523)
+          text: "머신러닝(ML) 및 대규모 언어 모델(LLM)의 개발-배포-학습을 아우르는 통합 오퍼레이션 환경(MLOps/LLMOps) 제공"
+          font: size=14px w=400 lh=23.5px align=LEFT
+          fill: #f5f5f5
+    [FRAME] li  343×200  @(16,1630)
+      fill: image  slot=li  path=./images/li.png
+      borderRadius: 8.381800651550293px
+      layout: VERTICAL  gap=8  padding=[20,20,20,20]
+      [FRAME] text  303×78  @(36,1732)
+        layout: VERTICAL  gap=5.867260456085205
+        [TEXT] Title  303×24  @(36,1732)
+          text: "Gabia GPU"
+          font: size=20px w=500 lh=23.9px align=LEFT
+          fill: #ffffff
+        [TEXT] Description  303×48  @(36,1762)
+          text: "고전력 및 냉각 설비를 갖춘 데이터센터에서↵AI 워크로드에 최적화된 인프라 제공"
+          font: size=16px w=400 lh=23.5px align=LEFT
+          fill: #f5f5f5
+    [FRAME] li  343×134  @(16,1846)
+      fill: gradient_linear [#09011a → #18004c]
+      borderRadius: 8.420141220092773px
+      layout: VERTICAL  gap=8  padding=[20,20,20,20]
+      [FRAME] text  303×94  @(36,1866)
+        layout: VERTICAL  gap=8.420141220092773
+        [FRAME] Frame 1000007824  303×67  @(36,1866)
+          layout: VERTICAL  gap=
+          [TEXT] 개발 속도 단축  91×19  @(36,1866)
+            text: "개발 속도 단축"
+            font: size=16px w=600 lh=19.1px align=LEFT
+            fill: #c8b4ff
+          [TEXT] 2X  52×48  @(36,1885)
+            text: "2X"
+            font: size=40px w=700 lh=47.7px align=LEFT
+            fill: gradient_linear [#4e34b1 → #cab7ff → #4c27ac → #8058e8]
+        [TEXT] 자동화 파이프라인으로 신속한 모델 개발  303×19  @(36,1941)
+          text: "자동화 파이프라인으로 신속한 모델 개발"
+          font: size=16px w=400 lh=19.1px align=LEFT
+          fill: #ffffff
+    [FRAME] li  343×134  @(16,1996)
+      fill: gradient_linear [#09011a → #18004c]
+      borderRadius: 8.420141220092773px
+      layout: VERTICAL  gap=8  padding=[20,20,20,20]
+      [FRAME] text  303×94  @(36,2016)
+        layout: VERTICAL  gap=8.420141220092773
+        [FRAME] Frame 1000007824  303×67  @(36,2016)
+          layout: VERTICAL  gap=
+          [TEXT] 환경 구축 시간 절감  123×19  @(36,2016)
+            text: "환경 구축 시간 절감"
+            font: size=16px w=600 lh=19.1px align=LEFT
+            fill: #c8b4ff
+          [TEXT] 90%  76×48  @(36,2035)
+            text: "90%"
+            font: size=50.52084732055664px w=700 lh=60.3px align=LEFT
+            fill: gradient_linear [#4e34b1 → #cab7ff → #4c27ac → #8058e8]
+        [TEXT] 별도 장비 없이 즉시 AI 환경 제공  303×19  @(36,2092)
+          text: "별도 장비 없이 즉시 AI 환경 제공"
+          font: size=16px w=400 lh=19.1px align=LEFT
+          fill: #ffffff
+    [FRAME] li  343×129  @(16,2147)
+      fill: gradient_linear [#09011a → #18004c]
+      borderRadius: 8.473773002624512px
+      layout: VERTICAL  gap=8  padding=[20,20,20,20]
+      [FRAME] text  248×89  @(36,2167)
+        layout: VERTICAL  gap=8.473773002624512
+        [FRAME] Frame 1000007824  248×62  @(36,2167)
+          layout: VERTICAL  gap=
+          [TEXT] 개발 생산성 향상  105×19  @(36,2167)
+            text: "개발 생산성 향상"
+            font: size=16px w=600 lh=19.1px align=LEFT
+            fill: #c8b4ff
+          [TEXT] 50%  70×43  @(36,2186)
+            text: "50%"
+            font: size=50.8426399230957px w=700 lh=60.7px align=LEFT
+            fill: gradient_linear [#4e34b1 → #cab7ff → #4c27ac → #8058e8]
+        [TEXT] 모델·데이터·실험을 한 플랫폼에서 관리  248×19  @(36,2237)
+          text: "모델·데이터·실험을 한 플랫폼에서 관리"
+          font: size=16px w=400 lh=19.1px align=LEFT
+          fill: #ffffff

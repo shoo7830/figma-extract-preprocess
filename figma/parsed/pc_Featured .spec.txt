@@ -1,0 +1,156 @@
+# Featured  — pc (1920×2343)
+# y=2881~5224
+
+## 섹션 트리
+[FRAME] Featured   1920×2343  @(0,2881)
+  fill: gradient_linear [#010102 → #1a005b → #10052b]
+  layout: VERTICAL  gap=60  padding=[120,370,120,370]
+  [FRAME] title  1180×198  @(370,3001)
+    layout: VERTICAL  gap=20
+    [TEXT] Featured  1180×28  @(370,3001)
+      text: "Featured "
+      font: size=20px w=700 lh=28.0px align=CENTER
+      fill: #7959ff
+    [TEXT] AI의 가능성을 현실로 만드는 도구 강력한 기능을 만나보세요  1180×150  @(370,3049)
+      text: "AI의 가능성을 현실로 만드는 도구↵강력한 기능을 만나보세요"
+      font: size=50px w=700 lh=75.0px align=CENTER
+      fill: #ffffff
+  [FRAME] list  1180×1845  @(370,3259)
+    layout: VERTICAL  gap=40
+    [FRAME] list_run  1180×337  @(370,3259)
+      layout: HORIZONTAL  gap=60
+      [RECTANGLE] img  560×337  @(370,3259)
+        fill: gradient_linear [#11013d → #3c2185]
+        fill: image  slot=img  path=./images/img.png
+        borderRadius: 10px
+      [FRAME] content  560×179  @(990,3338)
+        fill: #ffffff
+        layout: VERTICAL  gap=20  padding=[20,20]
+        [GROUP] badge  130×37  @(1010,3338)
+          borderRadius: 40px
+          [RECTANGLE] Rectangle 3205  130×37  @(1010,3338)
+            fill: #6d4df4
+            borderRadius: 40px
+          [TEXT] Run  36×28  @(1056,3341)
+            text: "Run"
+            font: size=20px w=600 lh=28.0px align=CENTER
+            fill: #ffffff
+        [GROUP] text  520×122  @(1010,3395)
+          [TEXT] 한 줄 명령어로 시작하는 모델 학습  462×45  @(1010,3395)
+            text: "한 줄 명령어로  시작하는 모델 학습"
+            font: size=32px w=700 lh=44.8px align=LEFT
+            fill: #ffffff
+          [TEXT] 복잡한 인프라 설정 없이 수백 노드 단위의 학습을 CLI 한 줄로 진행하여 생산성을 극대화하세요.  520×56  @(1010,3461)
+            text: "복잡한 인프라 설정 없이 수백 노드 단위의 학습을 CLI 한 줄로 진행하여 생산성을 극대화하세요."
+            font: size=20px w=400 lh=28.0px align=LEFT
+            fill: #f5f5f5
+    [FRAME] list_hub  1180×337  @(370,3636)
+      layout: HORIZONTAL  gap=60
+      [FRAME] content  560×179  @(370,3715)
+        fill: #ffffff
+        layout: VERTICAL  gap=20  padding=[20,20]
+        [GROUP] badge  130×37  @(390,3715)
+          borderRadius: 40px
+          [RECTANGLE] Rectangle 3205  130×37  @(390,3715)
+            fill: #6d4df4
+            borderRadius: 40px
+          [TEXT] Hub  39×28  @(435,3718)
+            text: "Hub"
+            font: size=20px w=600 lh=28.0px align=CENTER
+            fill: #ffffff
+        [GROUP] text  520×122  @(390,3772)
+          [TEXT] 최신 모델을 가장 빠르게 만나는 방법  462×45  @(390,3772)
+            text: "최신 모델을 가장 빠르게 만나는 방법"
+            font: size=32px w=700 lh=44.8px align=LEFT
+            fill: #ffffff
+          [TEXT] 새로운 오픈 소스 모델 템플릿을 활용해 챗봇, 이미지 생성, 문서 분류 등 AI 서비스 개발을 바로 시작해 보세요.  520×56  @(390,3838)
+            text: "새로운 오픈 소스 모델 템플릿을 활용해 챗봇, 이미지 생성, 문서 ↵분류 등 AI 서비스 개발을 바로 시작해 보세요."
+            font: size=20px w=400 lh=28.0px align=LEFT
+            fill: #ffffff
+      [VECTOR] img  560×337  @(990,3636)
+        fill: gradient_linear [#11013d → #3c2185]
+        fill: image  slot=img  path=./images/img.png
+        borderRadius: 10px
+    [FRAME] list_piepeline  1180×337  @(370,4013)
+      layout: HORIZONTAL  gap=60
+      [RECTANGLE] img  560×337  @(370,4013)
+        fill: gradient_linear [#2f196c → #5638ac]
+        fill: image  slot=img  path=./images/img.png
+        borderRadius: 10px
+      [FRAME] content  560×223  @(990,4070)
+        fill: #ffffff
+        layout: VERTICAL  gap=20  padding=[20,20]
+        [GROUP] badge  130×37  @(1010,4070)
+          borderRadius: 40px
+          [RECTANGLE] Rectangle   130×37  @(1010,4070)
+            fill: #6d4df4
+            borderRadius: 40px
+          [TEXT] Piepeline  85×28  @(1032,4073)
+            text: "Piepeline"
+            font: size=20px w=600 lh=28.0px align=CENTER
+            fill: #ffffff
+        [GROUP] text  520×166  @(1010,4127)
+          [FRAME] Frame 1000007797  520×166  @(1010,4127)
+            layout: VERTICAL  gap=20
+            [TEXT] 지속적인 통합·배포(CI·CD)로 AI 워크플로우 자동화  520×90  @(1010,4127)
+              text: "지속적인 통합·배포(CI·CD)로 ↵AI 워크플로우 자동화"
+              font: size=32px w=700 lh=44.8px align=LEFT
+              fill: #ffffff
+            [TEXT] 독립된 컨테이너로 구성된 데이터 전처리, 모델 학습, 배포 단계를 드래그 앤 드롭으로 관리해 보세요.  520×56  @(1010,4237)
+              text: "독립된 컨테이너로 구성된 데이터 전처리, 모델 학습, 배포 단계를 드래그 앤 드롭으로 관리해 보세요."
+              font: size=20px w=400 lh=28.0px align=LEFT
+              fill: #f5f5f5
+    [FRAME] list_service  1180×337  @(370,4390)
+      layout: HORIZONTAL  gap=60
+      [FRAME] content  560×179  @(370,4469)
+        fill: #ffffff
+        layout: VERTICAL  gap=20  padding=[20,20]
+        [GROUP] badge  130×37  @(390,4469)
+          borderRadius: 40px
+          [RECTANGLE] Rectangle   130×37  @(390,4469)
+            fill: #6d4df4
+            borderRadius: 40px
+          [TEXT] Service  70×28  @(419,4472)
+            text: "Service"
+            font: size=20px w=600 lh=28.0px align=CENTER
+            fill: #ffffff
+        [GROUP] text  520×122  @(390,4526)
+          [TEXT] 언제 어디서나 대규모 모델 배포  462×45  @(390,4526)
+            text: "언제 어디서나 대규모 모델 배포"
+            font: size=32px w=700 lh=44.8px align=LEFT
+            fill: #ffffff
+          [TEXT] 대량의 인퍼런스 요청도 직접 서버를 관리할 필요 없이 빠르고 안정적으로 처리해 보세요.  520×56  @(390,4592)
+            text: "대량의 인퍼런스 요청도 직접 서버를 관리할 필요 없이↵빠르고 안정적으로 처리해 보세요."
+            font: size=20px w=400 lh=28.0px align=LEFT
+            fill: #f5f5f5
+      [VECTOR] img  560×337  @(990,4390)
+        fill: gradient_linear [#30196e → #5436a8]
+        fill: image  slot=img  path=./images/img.png
+        borderRadius: 10px
+    [FRAME] list_cluste  1180×337  @(370,4767)
+      layout: HORIZONTAL  gap=60
+      [RECTANGLE] img  560×337  @(370,4767)
+        fill: gradient_linear [#331b73 → #724cdc]
+        fill: image  slot=img  path=./images/img.png
+        borderRadius: 10px
+      [FRAME] content  560×179  @(990,4846)
+        fill: #ffffff
+        layout: VERTICAL  gap=20  padding=[20,20]
+        [GROUP] badge  130×37  @(1010,4846)
+          borderRadius: 40px
+          [RECTANGLE] Rectangle  130×37  @(1010,4846)
+            fill: #6d4df4
+            borderRadius: 40px
+          [TEXT] Cluster  68×28  @(1040,4849)
+            text: "Cluster"
+            font: size=20px w=600 lh=28.0px align=CENTER
+            fill: #ffffff
+        [GROUP] text  520×122  @(1010,4903)
+          [TEXT] 통합 인터페이스로 리소스 관리  462×45  @(1010,4903)
+            text: "통합 인터페이스로 리소스 관리"
+            font: size=32px w=700 lh=44.8px align=LEFT
+            fill: #ffffff
+          [TEXT] GPU 사용률, 지연 시간, 처리량 등 주요 수치를 모니터링하고 자유롭게 리소스를 확장해 보세요.  520×56  @(1010,4969)
+            text: "GPU 사용률, 지연 시간, 처리량 등 주요 수치를 모니터링하고↵자유롭게 리소스를 확장해 보세요."
+            font: size=20px w=400 lh=28.0px align=LEFT
+            fill: #f5f5f5

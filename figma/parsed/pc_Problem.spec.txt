@@ -1,0 +1,82 @@
+# Problem — pc (1920×646)
+# y=1160~1806
+
+## 섹션 트리
+[FRAME] Problem  1920×646  @(0,1160)
+  fill: gradient_linear [#020109 → #100335]
+  layout: VERTICAL  gap=60  padding=[120,370,120,370]
+  [FRAME] title  1180×198  @(370,1280)
+    layout: VERTICAL  gap=20
+    [TEXT] Problem  1180×28  @(370,1280)
+      text: "Problem"
+      font: size=20px w=700 lh=28.0px align=CENTER
+      fill: #7959ff
+    [TEXT] AI 프로젝트 실패율 85% 어떻게 해결할 수 있을까요?  1180×150  @(370,1328)
+      text: "AI 프로젝트 실패율 85%↵어떻게 해결할 수 있을까요?"
+      font: size=50px w=700 lh=75.0px align=CENTER
+      fill: #ffffff
+  [FRAME] list  1180×148  @(370,1538)
+    layout: HORIZONTAL  gap=20
+    [FRAME] li  232×64  @(390,1538)
+      fill: gradient_linear [#070226 → #04000e]
+      borderRadius: 50px
+      layout: HORIZONTAL  gap=10  padding=[20,30,20,30]
+      shadow: rgba(116,42,253,0.80) offset=(0,0) blur=20
+      [TEXT] GPU 도입이 어려워요  172×24  @(420,1558)
+        text: "GPU 도입이 어려워요"
+        font: size=20px w=500 lh=23.9px align=CENTER
+        fill: #f5f5f5
+    [FRAME] li  306×64  @(642,1538)
+      fill: gradient_linear [#070226 → #04000e]
+      borderRadius: 50px
+      layout: HORIZONTAL  gap=10  padding=[20,30,20,30]
+      shadow: rgba(116,42,253,0.80) offset=(0,0) blur=20
+      [TEXT] AI 프로젝트 관리 체계가 없어요  246×24  @(672,1558)
+        text: "AI 프로젝트 관리 체계가 없어요"
+        font: size=20px w=500 lh=23.9px align=CENTER
+        fill: #f5f5f5
+    [FRAME] li  300×64  @(968,1538)
+      fill: gradient_linear [#070226 → #04000e]
+      borderRadius: 50px
+      layout: HORIZONTAL  gap=10  padding=[20,30,20,30]
+      shadow: rgba(116,42,253,0.80) offset=(0,0) blur=20
+      [TEXT] 매번 새로운 툴을 학습해야해요  240×24  @(998,1558)
+        text: "매번 새로운 툴을 학습해야해요"
+        font: size=20px w=500 lh=23.9px align=CENTER
+        fill: #f5f5f5
+    [FRAME] li  243×64  @(1288,1538)
+      fill: gradient_linear [#070226 → #04000e]
+      borderRadius: 50px
+      layout: HORIZONTAL  gap=10  padding=[20,30,20,30]
+      shadow: rgba(116,42,253,0.80) offset=(0,0) blur=20
+      [TEXT] 인프라 확장이 어려워요  183×24  @(1318,1558)
+        text: "인프라 확장이 어려워요"
+        font: size=20px w=500 lh=23.9px align=CENTER
+        fill: #f5f5f5
+    [FRAME] li  243×64  @(530,1622)
+      fill: gradient_linear [#070226 → #04000e]
+      borderRadius: 50px
+      layout: HORIZONTAL  gap=10  padding=[20,30,20,30]
+      shadow: rgba(116,42,253,0.80) offset=(0,0) blur=20
+      [TEXT] 데이터 관리가 힘들어요  183×24  @(560,1642)
+        text: "데이터 관리가 힘들어요"
+        font: size=20px w=500 lh=23.9px align=CENTER
+        fill: #f5f5f5
+    [FRAME] li  260×64  @(793,1622)
+      fill: gradient_linear [#070226 → #04000e]
+      borderRadius: 50px
+      layout: HORIZONTAL  gap=10  padding=[20,30,20,30]
+      shadow: rgba(116,42,253,0.80) offset=(0,0) blur=20
+      [TEXT] 프로세스가 매번 바뀌어요  200×24  @(823,1642)
+        text: "프로세스가 매번 바뀌어요"
+        font: size=20px w=500 lh=23.9px align=CENTER
+        fill: #f5f5f5
+    [FRAME] li  317×64  @(1073,1622)
+      fill: gradient_linear [#070226 → #04000e]
+      borderRadius: 50px
+      layout: HORIZONTAL  gap=10  padding=[20,30,20,30]
+      shadow: rgba(116,42,253,0.80) offset=(0,0) blur=20
+      [TEXT] 모델 개발에만 집중하기 어려워요  257×24  @(1103,1642)
+        text: "모델 개발에만 집중하기 어려워요"
+        font: size=20px w=500 lh=23.9px align=CENTER
+        fill: #f5f5f5

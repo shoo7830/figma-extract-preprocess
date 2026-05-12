@@ -1,0 +1,149 @@
+{
+  "prefix": "tb",
+  "section": "Contact us",
+  "bounds": {
+    "x": 0,
+    "y": 5036,
+    "width": 1024,
+    "height": 518
+  },
+  "tree": {
+    "name": "Contact us",
+    "type": "FRAME",
+    "x": 0,
+    "y": 5036,
+    "width": 1024,
+    "height": 518,
+    "fills": [
+      {
+        "type": "image",
+        "imageSlot": {
+          "slotId": "contact-us",
+          "role": "unknown",
+          "expectedSize": {
+            "width": 1024,
+            "height": 518
+          },
+          "aspectRatio": 1.9768,
+          "imageRef": "e3656ca6a2d254f352797ce85ebe04b163e3fa54"
+        }
+      }
+    ],
+    "layoutMode": "VERTICAL",
+    "itemSpacing": 70,
+    "paddingTop": 100,
+    "paddingBottom": 100,
+    "paddingLeft": 20,
+    "paddingRight": 20,
+    "counterAxisAlignItems": "CENTER",
+    "children": [
+      {
+        "name": "title",
+        "type": "FRAME",
+        "x": 20,
+        "y": 5136,
+        "width": 984,
+        "height": 318,
+        "layoutMode": "VERTICAL",
+        "itemSpacing": 70,
+        "counterAxisAlignItems": "CENTER",
+        "children": [
+          {
+            "name": "Contact us",
+            "type": "TEXT",
+            "x": 20,
+            "y": 5136,
+            "width": 984,
+            "height": 28,
+            "text": "Contact us",
+            "font": {
+              "size": 20,
+              "weight": 700,
+              "lineHeight": 28,
+              "letterSpacing": -0.4,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#6d4df4",
+                "opacity": 1
+              }
+            ]
+          },
+          {
+            "name": "하나의 플랫폼에서 펼쳐지는 AI 여정 Gabia AI Platform과 함께하세요",
+            "type": "TEXT",
+            "x": 20,
+            "y": 5234,
+            "width": 984,
+            "height": 100,
+            "text": "하나의 플랫폼에서 펼쳐지는 AI 여정\nGabia AI Platform과 함께하세요",
+            "font": {
+              "size": 36,
+              "weight": 500,
+              "lineHeight": 50.39999771118164,
+              "letterSpacing": 0,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff",
+                "opacity": 1
+              }
+            ]
+          },
+          {
+            "name": "Primary button",
+            "type": "INSTANCE",
+            "x": 372,
+            "y": 5404,
+            "width": 280,
+            "height": 50,
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#000000",
+                "opacity": 1
+              }
+            ],
+            "borderRadius": 12,
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 12.745098114013672,
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "3개월 무료 이용하기",
+                "type": "TEXT",
+                "x": 468,
+                "y": 5420,
+                "width": 87,
+                "height": 19,
+                "text": "도입 문의하기",
+                "font": {
+                  "size": 16,
+                  "weight": 700,
+                  "lineHeight": 19.09375,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "loose_overlays": []
+}

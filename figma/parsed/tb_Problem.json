@@ -1,0 +1,593 @@
+{
+  "prefix": "tb",
+  "section": "Problem",
+  "bounds": {
+    "x": 0,
+    "y": 1010,
+    "width": 1024,
+    "height": 608
+  },
+  "tree": {
+    "name": "Problem",
+    "type": "FRAME",
+    "x": 0,
+    "y": 1010,
+    "width": 1024,
+    "height": 608,
+    "fills": [
+      {
+        "type": "gradient_linear",
+        "stops": [
+          {
+            "color": "#020109",
+            "position": 0
+          },
+          {
+            "color": "#100335",
+            "position": 1
+          }
+        ]
+      }
+    ],
+    "layoutMode": "VERTICAL",
+    "itemSpacing": 40,
+    "paddingTop": 100,
+    "paddingBottom": 100,
+    "paddingLeft": 20,
+    "paddingRight": 20,
+    "primaryAxisAlignItems": "CENTER",
+    "counterAxisAlignItems": "CENTER",
+    "children": [
+      {
+        "name": "title",
+        "type": "FRAME",
+        "x": 20,
+        "y": 1110,
+        "width": 984,
+        "height": 145,
+        "layoutMode": "VERTICAL",
+        "itemSpacing": 20,
+        "counterAxisAlignItems": "CENTER",
+        "children": [
+          {
+            "name": "Problem",
+            "type": "TEXT",
+            "x": 20,
+            "y": 1110,
+            "width": 984,
+            "height": 25,
+            "text": "Problem",
+            "font": {
+              "size": 18,
+              "weight": 700,
+              "lineHeight": 25.19999885559082,
+              "letterSpacing": -0.36,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#7959ff",
+                "opacity": 1
+              }
+            ]
+          },
+          {
+            "name": "AI 프로젝트 실패율 85% 어떻게 해결할 수 있을까요?",
+            "type": "TEXT",
+            "x": 20,
+            "y": 1155,
+            "width": 984,
+            "height": 100,
+            "text": "AI 프로젝트 실패율 85%\n어떻게 해결할 수 있을까요?",
+            "font": {
+              "size": 36,
+              "weight": 500,
+              "lineHeight": 50.39999771118164,
+              "letterSpacing": 0,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff",
+                "opacity": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "list",
+        "type": "FRAME",
+        "x": 20,
+        "y": 1295,
+        "width": 984,
+        "height": 223,
+        "layoutMode": "HORIZONTAL",
+        "itemSpacing": 20,
+        "primaryAxisAlignItems": "CENTER",
+        "counterAxisAlignItems": "CENTER",
+        "children": [
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 124,
+            "y": 1295,
+            "width": 203,
+            "height": 61,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#070226",
+                    "position": 0
+                  },
+                  {
+                    "color": "#04000e",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 50,
+            "effects": [
+              {
+                "type": "drop-shadow",
+                "color": "rgba(116,42,253,0.80)",
+                "offset": {
+                  "x": 0,
+                  "y": 0
+                },
+                "blur": 20
+              }
+            ],
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 10,
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "GPU 도입이 어려워요",
+                "type": "TEXT",
+                "x": 148,
+                "y": 1315,
+                "width": 155,
+                "height": 21,
+                "text": "GPU 도입이 어려워요",
+                "font": {
+                  "size": 18,
+                  "weight": 500,
+                  "lineHeight": 21.48046875,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#f5f5f5",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 347,
+            "y": 1295,
+            "width": 269,
+            "height": 61,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#070226",
+                    "position": 0
+                  },
+                  {
+                    "color": "#04000e",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 50,
+            "effects": [
+              {
+                "type": "drop-shadow",
+                "color": "rgba(116,42,253,0.80)",
+                "offset": {
+                  "x": 0,
+                  "y": 0
+                },
+                "blur": 20
+              }
+            ],
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 10,
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "AI 프로젝트 관리 체계가 없어요",
+                "type": "TEXT",
+                "x": 371,
+                "y": 1315,
+                "width": 221,
+                "height": 21,
+                "text": "AI 프로젝트 관리 체계가 없어요",
+                "font": {
+                  "size": 18,
+                  "weight": 500,
+                  "lineHeight": 21.48046875,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#f5f5f5",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 636,
+            "y": 1295,
+            "width": 264,
+            "height": 61,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#070226",
+                    "position": 0
+                  },
+                  {
+                    "color": "#04000e",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 50,
+            "effects": [
+              {
+                "type": "drop-shadow",
+                "color": "rgba(116,42,253,0.80)",
+                "offset": {
+                  "x": 0,
+                  "y": 0
+                },
+                "blur": 20
+              }
+            ],
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 10,
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "매번 새로운 툴을 학습해야해요",
+                "type": "TEXT",
+                "x": 660,
+                "y": 1315,
+                "width": 216,
+                "height": 21,
+                "text": "매번 새로운 툴을 학습해야해요",
+                "font": {
+                  "size": 18,
+                  "weight": 500,
+                  "lineHeight": 21.48046875,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#f5f5f5",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 165,
+            "y": 1376,
+            "width": 213,
+            "height": 61,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#070226",
+                    "position": 0
+                  },
+                  {
+                    "color": "#04000e",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 50,
+            "effects": [
+              {
+                "type": "drop-shadow",
+                "color": "rgba(116,42,253,0.80)",
+                "offset": {
+                  "x": 0,
+                  "y": 0
+                },
+                "blur": 20
+              }
+            ],
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 10,
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "인프라 확장이 어려워요",
+                "type": "TEXT",
+                "x": 189,
+                "y": 1396,
+                "width": 165,
+                "height": 21,
+                "text": "인프라 확장이 어려워요",
+                "font": {
+                  "size": 18,
+                  "weight": 500,
+                  "lineHeight": 21.48046875,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#f5f5f5",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 398,
+            "y": 1376,
+            "width": 213,
+            "height": 61,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#070226",
+                    "position": 0
+                  },
+                  {
+                    "color": "#04000e",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 50,
+            "effects": [
+              {
+                "type": "drop-shadow",
+                "color": "rgba(116,42,253,0.80)",
+                "offset": {
+                  "x": 0,
+                  "y": 0
+                },
+                "blur": 20
+              }
+            ],
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 10,
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "데이터 관리가 힘들어요",
+                "type": "TEXT",
+                "x": 422,
+                "y": 1396,
+                "width": 165,
+                "height": 21,
+                "text": "데이터 관리가 힘들어요",
+                "font": {
+                  "size": 18,
+                  "weight": 500,
+                  "lineHeight": 21.48046875,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#f5f5f5",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 631,
+            "y": 1376,
+            "width": 228,
+            "height": 61,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#070226",
+                    "position": 0
+                  },
+                  {
+                    "color": "#04000e",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 50,
+            "effects": [
+              {
+                "type": "drop-shadow",
+                "color": "rgba(116,42,253,0.80)",
+                "offset": {
+                  "x": 0,
+                  "y": 0
+                },
+                "blur": 20
+              }
+            ],
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 10,
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "프로세스가 매번 바뀌어요",
+                "type": "TEXT",
+                "x": 655,
+                "y": 1396,
+                "width": 180,
+                "height": 21,
+                "text": "프로세스가 매번 바뀌어요",
+                "font": {
+                  "size": 18,
+                  "weight": 500,
+                  "lineHeight": 21.48046875,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#f5f5f5",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 372,
+            "y": 1457,
+            "width": 279,
+            "height": 61,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#070226",
+                    "position": 0
+                  },
+                  {
+                    "color": "#04000e",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 50,
+            "effects": [
+              {
+                "type": "drop-shadow",
+                "color": "rgba(116,42,253,0.80)",
+                "offset": {
+                  "x": 0,
+                  "y": 0
+                },
+                "blur": 20
+              }
+            ],
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 10,
+            "paddingTop": 20,
+            "paddingBottom": 20,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "모델 개발에만 집중하기 어려워요",
+                "type": "TEXT",
+                "x": 396,
+                "y": 1477,
+                "width": 231,
+                "height": 21,
+                "text": "모델 개발에만 집중하기 어려워요",
+                "font": {
+                  "size": 18,
+                  "weight": 500,
+                  "lineHeight": 21.48046875,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#f5f5f5",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "loose_overlays": []
+}

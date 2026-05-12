@@ -1,0 +1,994 @@
+{
+  "prefix": "mb",
+  "section": "Featured ",
+  "bounds": {
+    "x": 0,
+    "y": 2336,
+    "width": 375,
+    "height": 2206
+  },
+  "tree": {
+    "name": "Featured ",
+    "type": "FRAME",
+    "x": 0,
+    "y": 2336,
+    "width": 375,
+    "height": 2206,
+    "fills": [
+      {
+        "type": "gradient_linear",
+        "stops": [
+          {
+            "color": "#010102",
+            "position": 0
+          },
+          {
+            "color": "#1a005b",
+            "position": 0.4711538553237915
+          },
+          {
+            "color": "#10052b",
+            "position": 1
+          }
+        ]
+      }
+    ],
+    "layoutMode": "VERTICAL",
+    "itemSpacing": 30,
+    "paddingTop": 60,
+    "paddingBottom": 60,
+    "paddingLeft": 16,
+    "paddingRight": 16,
+    "primaryAxisAlignItems": "CENTER",
+    "counterAxisAlignItems": "CENTER",
+    "children": [
+      {
+        "name": "title",
+        "type": "FRAME",
+        "x": 16,
+        "y": 2396,
+        "width": 343,
+        "height": 117,
+        "layoutMode": "VERTICAL",
+        "itemSpacing": 20,
+        "counterAxisAlignItems": "CENTER",
+        "children": [
+          {
+            "name": "Featured",
+            "type": "TEXT",
+            "x": 16,
+            "y": 2396,
+            "width": 343,
+            "height": 25,
+            "text": "Featured ",
+            "font": {
+              "size": 18,
+              "weight": 700,
+              "lineHeight": 25.19999885559082,
+              "letterSpacing": -0.36,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#7959ff",
+                "opacity": 1
+              }
+            ]
+          },
+          {
+            "name": "AI의 가능성을 현실로 만드는 도구 강력한 기능을 만나보세요",
+            "type": "TEXT",
+            "x": 30,
+            "y": 2441,
+            "width": 316,
+            "height": 72,
+            "text": "AI의 가능성을 현실로 만드는 도구\n강력한 기능을 만나보세요",
+            "font": {
+              "size": 24,
+              "weight": 700,
+              "lineHeight": 36,
+              "letterSpacing": 0,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff",
+                "opacity": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "list",
+        "type": "FRAME",
+        "x": 16,
+        "y": 2543,
+        "width": 343,
+        "height": 1939,
+        "layoutMode": "VERTICAL",
+        "itemSpacing": 30,
+        "children": [
+          {
+            "name": "list_run",
+            "type": "FRAME",
+            "x": 16,
+            "y": 2543,
+            "width": 343,
+            "height": 361,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 20,
+            "primaryAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "img",
+                "type": "RECTANGLE",
+                "x": 16,
+                "y": 2543,
+                "width": 343,
+                "height": 219,
+                "fills": [
+                  {
+                    "type": "gradient_linear",
+                    "stops": [
+                      {
+                        "color": "#11013d",
+                        "position": 0
+                      },
+                      {
+                        "color": "#3c2185",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  {
+                    "type": "image",
+                    "imageSlot": {
+                      "slotId": "img",
+                      "role": "unknown",
+                      "expectedSize": {
+                        "width": 343,
+                        "height": 219
+                      },
+                      "aspectRatio": 1.5662,
+                      "imageRef": "75b58d39765404f19cebe5e6952d74ddc8fabc3b"
+                    }
+                  }
+                ],
+                "borderRadius": 10
+              },
+              {
+                "name": "content",
+                "type": "FRAME",
+                "x": 16,
+                "y": 2782,
+                "width": 343,
+                "height": 122,
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff",
+                    "opacity": 1
+                  }
+                ],
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 16,
+                "children": [
+                  {
+                    "name": "badge",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 2782,
+                    "width": 105,
+                    "height": 26,
+                    "borderRadius": 40,
+                    "children": [
+                      {
+                        "name": "Rectangle 3205",
+                        "type": "RECTANGLE",
+                        "x": 16,
+                        "y": 2782,
+                        "width": 105,
+                        "height": 26,
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#6d4df4",
+                            "opacity": 1
+                          }
+                        ],
+                        "borderRadius": 40
+                      },
+                      {
+                        "name": "Run",
+                        "type": "TEXT",
+                        "x": 46,
+                        "y": 2784,
+                        "width": 46,
+                        "height": 22,
+                        "text": "Run",
+                        "font": {
+                          "size": 16,
+                          "weight": 600,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "CENTER"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "text",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 2824,
+                    "width": 343,
+                    "height": 80,
+                    "children": [
+                      {
+                        "name": "한 줄 명령어로 시작하는 모델 학습",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 2824,
+                        "width": 343,
+                        "height": 28,
+                        "text": "한 줄 명령어로  시작하는 모델 학습",
+                        "font": {
+                          "size": 20,
+                          "weight": 700,
+                          "lineHeight": 28,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "복잡한 인프라 설정 없이 수백 노드 단위의 학습을 CLI 한 줄로 진행하여 생산성을 극대화하세요.",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 2860,
+                        "width": 343,
+                        "height": 44,
+                        "text": "복잡한 인프라 설정 없이 수백 노드 단위의 학습을 CLI 한 줄로 진행하여 생산성을 극대화하세요.",
+                        "font": {
+                          "size": 16,
+                          "weight": 400,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#f5f5f5",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "list_hub",
+            "type": "FRAME",
+            "x": 16,
+            "y": 2934,
+            "width": 343,
+            "height": 361,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 20,
+            "primaryAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "img",
+                "type": "RECTANGLE",
+                "x": 16,
+                "y": 2934,
+                "width": 343,
+                "height": 219,
+                "fills": [
+                  {
+                    "type": "gradient_linear",
+                    "stops": [
+                      {
+                        "color": "#11013d",
+                        "position": 0
+                      },
+                      {
+                        "color": "#3c2185",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  {
+                    "type": "image",
+                    "imageSlot": {
+                      "slotId": "img",
+                      "role": "unknown",
+                      "expectedSize": {
+                        "width": 343,
+                        "height": 219
+                      },
+                      "aspectRatio": 1.5662,
+                      "imageRef": "ce82e008ee4164d2740e400c6838787d96c3e269"
+                    }
+                  }
+                ],
+                "borderRadius": 10
+              },
+              {
+                "name": "content",
+                "type": "FRAME",
+                "x": 16,
+                "y": 3173,
+                "width": 343,
+                "height": 122,
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff",
+                    "opacity": 1
+                  }
+                ],
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 16,
+                "children": [
+                  {
+                    "name": "badge",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 3173,
+                    "width": 105,
+                    "height": 26,
+                    "borderRadius": 40,
+                    "children": [
+                      {
+                        "name": "Rectangle 3205",
+                        "type": "RECTANGLE",
+                        "x": 16,
+                        "y": 3173,
+                        "width": 105,
+                        "height": 26,
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#6d4df4",
+                            "opacity": 1
+                          }
+                        ],
+                        "borderRadius": 40
+                      },
+                      {
+                        "name": "Hub",
+                        "type": "TEXT",
+                        "x": 46,
+                        "y": 3175,
+                        "width": 46,
+                        "height": 22,
+                        "text": "Hub",
+                        "font": {
+                          "size": 16,
+                          "weight": 600,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "CENTER"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "text",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 3215,
+                    "width": 343,
+                    "height": 80,
+                    "children": [
+                      {
+                        "name": "최신 모델을 가장 빠르게 만나는 방법",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 3215,
+                        "width": 343,
+                        "height": 28,
+                        "text": "최신 모델을 가장 빠르게 만나는 방법",
+                        "font": {
+                          "size": 20,
+                          "weight": 700,
+                          "lineHeight": 28,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "새로운 오픈 소스 모델 템플릿을 활용해 챗봇, 이미지 생성, 문서 분류 등 AI 서비스 개발을 바로 시작해 보세요.",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 3251,
+                        "width": 343,
+                        "height": 44,
+                        "text": "새로운 오픈 소스 모델 템플릿을 활용해 챗봇, 이미지 생성, 문서 분류 등 AI 서비스 개발을 바로 시작해 보세요.",
+                        "font": {
+                          "size": 16,
+                          "weight": 400,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#f5f5f5",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "list_piepeline",
+            "type": "FRAME",
+            "x": 16,
+            "y": 3325,
+            "width": 343,
+            "height": 383,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 20,
+            "primaryAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "Rectangle 3263",
+                "type": "RECTANGLE",
+                "x": 16,
+                "y": 3325,
+                "width": 343,
+                "height": 219,
+                "fills": [
+                  {
+                    "type": "gradient_linear",
+                    "stops": [
+                      {
+                        "color": "#11013d",
+                        "position": 0
+                      },
+                      {
+                        "color": "#3c2185",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  {
+                    "type": "image",
+                    "imageSlot": {
+                      "slotId": "rectangle-3263",
+                      "role": "unknown",
+                      "expectedSize": {
+                        "width": 343,
+                        "height": 219
+                      },
+                      "aspectRatio": 1.5662,
+                      "imageRef": "235a8776eab53ab747528c7870c8c6d54e06fdb9"
+                    }
+                  }
+                ],
+                "borderRadius": 10
+              },
+              {
+                "name": "content",
+                "type": "FRAME",
+                "x": 16,
+                "y": 3564,
+                "width": 343,
+                "height": 144,
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff",
+                    "opacity": 1
+                  }
+                ],
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 16,
+                "children": [
+                  {
+                    "name": "Group 1000007828",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 3564,
+                    "width": 105,
+                    "height": 26,
+                    "borderRadius": 40,
+                    "children": [
+                      {
+                        "name": "Rectangle 3205",
+                        "type": "RECTANGLE",
+                        "x": 16,
+                        "y": 3564,
+                        "width": 105,
+                        "height": 26,
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#6d4df4",
+                            "opacity": 1
+                          }
+                        ],
+                        "borderRadius": 40
+                      },
+                      {
+                        "name": "Piepeline",
+                        "type": "TEXT",
+                        "x": 35,
+                        "y": 3566,
+                        "width": 68,
+                        "height": 22,
+                        "text": "Piepeline",
+                        "font": {
+                          "size": 16,
+                          "weight": 600,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "CENTER"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Group 1000007824",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 3606,
+                    "width": 343,
+                    "height": 102,
+                    "children": [
+                      {
+                        "name": "지속적인 통합·배포(CI·CD)로 AI 워크플로우 자동화",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 3606,
+                        "width": 240,
+                        "height": 53,
+                        "text": "지속적인 통합·배포(CI·CD)로 \nAI 워크플로우 자동화",
+                        "font": {
+                          "size": 20,
+                          "weight": 700,
+                          "lineHeight": 28,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "독립된 컨테이너로 구성된 데이터 전처리, 모델 학습, 배포 단계를 드래그 앤 드롭으로 관리해 보세요.",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 3667,
+                        "width": 343,
+                        "height": 42,
+                        "text": "독립된 컨테이너로 구성된 데이터 전처리, 모델 학습, 배포 단계를 드래그 앤 드롭으로 관리해 보세요.",
+                        "font": {
+                          "size": 16,
+                          "weight": 400,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#f5f5f5",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "list_service",
+            "type": "FRAME",
+            "x": 16,
+            "y": 3739,
+            "width": 343,
+            "height": 361,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 20,
+            "primaryAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "img",
+                "type": "RECTANGLE",
+                "x": 16,
+                "y": 3739,
+                "width": 343,
+                "height": 219,
+                "fills": [
+                  {
+                    "type": "gradient_linear",
+                    "stops": [
+                      {
+                        "color": "#11013d",
+                        "position": 0
+                      },
+                      {
+                        "color": "#3c2185",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  {
+                    "type": "image",
+                    "imageSlot": {
+                      "slotId": "img",
+                      "role": "unknown",
+                      "expectedSize": {
+                        "width": 343,
+                        "height": 219
+                      },
+                      "aspectRatio": 1.5662,
+                      "imageRef": "2de4bc6dfb3d8027a29c97f031220f6efeb56585"
+                    }
+                  }
+                ],
+                "borderRadius": 10
+              },
+              {
+                "name": "content",
+                "type": "FRAME",
+                "x": 16,
+                "y": 3978,
+                "width": 343,
+                "height": 122,
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff",
+                    "opacity": 1
+                  }
+                ],
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 16,
+                "children": [
+                  {
+                    "name": "badge",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 3978,
+                    "width": 105,
+                    "height": 26,
+                    "borderRadius": 40,
+                    "children": [
+                      {
+                        "name": "Rectangle 3205",
+                        "type": "RECTANGLE",
+                        "x": 16,
+                        "y": 3978,
+                        "width": 105,
+                        "height": 26,
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#6d4df4",
+                            "opacity": 1
+                          }
+                        ],
+                        "borderRadius": 40
+                      },
+                      {
+                        "name": "Service",
+                        "type": "TEXT",
+                        "x": 41,
+                        "y": 3980,
+                        "width": 56,
+                        "height": 22,
+                        "text": "Service",
+                        "font": {
+                          "size": 16,
+                          "weight": 600,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "CENTER"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "text",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 4020,
+                    "width": 343,
+                    "height": 80,
+                    "children": [
+                      {
+                        "name": "언제 어디서나 대규모 모델 배포",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 4020,
+                        "width": 343,
+                        "height": 28,
+                        "text": "언제 어디서나 대규모 모델 배포",
+                        "font": {
+                          "size": 20,
+                          "weight": 700,
+                          "lineHeight": 28,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "대량의 인퍼런스 요청도 직접 서버를 관리할 필요 없이 빠르고 안정적으로 처리해 보세요.",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 4056,
+                        "width": 343,
+                        "height": 44,
+                        "text": "대량의 인퍼런스 요청도 직접 서버를 관리할 필요 없이\n빠르고 안정적으로 처리해 보세요.",
+                        "font": {
+                          "size": 16,
+                          "weight": 400,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#f5f5f5",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "list_cluster",
+            "type": "FRAME",
+            "x": 16,
+            "y": 4130,
+            "width": 343,
+            "height": 361,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 20,
+            "primaryAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "img",
+                "type": "RECTANGLE",
+                "x": 16,
+                "y": 4130,
+                "width": 343,
+                "height": 219,
+                "fills": [
+                  {
+                    "type": "gradient_linear",
+                    "stops": [
+                      {
+                        "color": "#11013d",
+                        "position": 0
+                      },
+                      {
+                        "color": "#3c2185",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  {
+                    "type": "image",
+                    "imageSlot": {
+                      "slotId": "img",
+                      "role": "unknown",
+                      "expectedSize": {
+                        "width": 343,
+                        "height": 219
+                      },
+                      "aspectRatio": 1.5662,
+                      "imageRef": "0590ae8003718fe3faf257cd74a2868f83566b68"
+                    }
+                  }
+                ],
+                "borderRadius": 10
+              },
+              {
+                "name": "content",
+                "type": "FRAME",
+                "x": 16,
+                "y": 4369,
+                "width": 343,
+                "height": 122,
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff",
+                    "opacity": 1
+                  }
+                ],
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 16,
+                "children": [
+                  {
+                    "name": "badge",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 4369,
+                    "width": 105,
+                    "height": 26,
+                    "borderRadius": 40,
+                    "children": [
+                      {
+                        "name": "Rectangle 3205",
+                        "type": "RECTANGLE",
+                        "x": 16,
+                        "y": 4369,
+                        "width": 105,
+                        "height": 26,
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#6d4df4",
+                            "opacity": 1
+                          }
+                        ],
+                        "borderRadius": 40
+                      },
+                      {
+                        "name": "Cluster",
+                        "type": "TEXT",
+                        "x": 42,
+                        "y": 4371,
+                        "width": 54,
+                        "height": 22,
+                        "text": "Cluster",
+                        "font": {
+                          "size": 16,
+                          "weight": 600,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "CENTER"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "text",
+                    "type": "GROUP",
+                    "x": 16,
+                    "y": 4411,
+                    "width": 343,
+                    "height": 80,
+                    "children": [
+                      {
+                        "name": "통합 인터페이스로 리소스 관리",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 4411,
+                        "width": 343,
+                        "height": 28,
+                        "text": "통합 인터페이스로 리소스 관리",
+                        "font": {
+                          "size": 20,
+                          "weight": 700,
+                          "lineHeight": 28,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#ffffff",
+                            "opacity": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "GPU 사용률, 지연 시간, 처리량 등 주요 수치를 모니터링하고자유롭게 리소스를 확장해 보세요.",
+                        "type": "TEXT",
+                        "x": 16,
+                        "y": 4447,
+                        "width": 343,
+                        "height": 44,
+                        "text": "GPU 사용률, 지연 시간, 처리량 등 주요 수치를 모니터링하고자유롭게 리소스를 확장해 보세요.",
+                        "font": {
+                          "size": 16,
+                          "weight": 400,
+                          "lineHeight": 22.399999618530273,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#f5f5f5",
+                            "opacity": 1
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "loose_overlays": []
+}

@@ -1,0 +1,723 @@
+{
+  "prefix": "tb",
+  "section": "Solution",
+  "bounds": {
+    "x": 0,
+    "y": 1618,
+    "width": 1024,
+    "height": 852
+  },
+  "tree": {
+    "name": "Solution",
+    "type": "FRAME",
+    "x": 0,
+    "y": 1618,
+    "width": 1024,
+    "height": 852,
+    "fills": [
+      {
+        "type": "gradient_linear",
+        "stops": [
+          {
+            "color": "#100334",
+            "position": 0
+          },
+          {
+            "color": "#000000",
+            "position": 1
+          }
+        ]
+      }
+    ],
+    "layoutMode": "VERTICAL",
+    "itemSpacing": 40,
+    "paddingTop": 100,
+    "paddingBottom": 100,
+    "paddingLeft": 20,
+    "paddingRight": 20,
+    "primaryAxisAlignItems": "CENTER",
+    "counterAxisAlignItems": "CENTER",
+    "children": [
+      {
+        "name": "title",
+        "type": "FRAME",
+        "x": 128,
+        "y": 1718,
+        "width": 768,
+        "height": 145,
+        "layoutMode": "VERTICAL",
+        "itemSpacing": 20,
+        "counterAxisAlignItems": "CENTER",
+        "children": [
+          {
+            "name": "Solution",
+            "type": "TEXT",
+            "x": 128,
+            "y": 1718,
+            "width": 768,
+            "height": 25,
+            "text": "Solution",
+            "font": {
+              "size": 18,
+              "weight": 700,
+              "lineHeight": 25.19999885559082,
+              "letterSpacing": -0.36,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#7959ff",
+                "opacity": 1
+              }
+            ]
+          },
+          {
+            "name": "복잡한 문제를 해결한 하나의 플랫폼 Gabia AI Platform",
+            "type": "TEXT",
+            "x": 128,
+            "y": 1763,
+            "width": 768,
+            "height": 100,
+            "text": "복잡한 문제를 해결한 하나의 플랫폼\nGabia AI Platform",
+            "font": {
+              "size": 36,
+              "weight": 500,
+              "lineHeight": 50.39999771118164,
+              "letterSpacing": 0,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff",
+                "opacity": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "list",
+        "type": "FRAME",
+        "x": 20,
+        "y": 1903,
+        "width": 984,
+        "height": 467,
+        "layoutMode": "HORIZONTAL",
+        "itemSpacing": 20,
+        "children": [
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 20,
+            "y": 1903,
+            "width": 540,
+            "height": 293,
+            "fills": [
+              {
+                "type": "image",
+                "imageSlot": {
+                  "slotId": "li",
+                  "role": "unknown",
+                  "expectedSize": {
+                    "width": 540,
+                    "height": 293
+                  },
+                  "aspectRatio": 1.843,
+                  "imageRef": "8b48f4bf906d1fab36712d985cf84166e4a1009f"
+                }
+              }
+            ],
+            "borderRadius": 8,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 8,
+            "paddingTop": 30,
+            "paddingBottom": 30,
+            "paddingLeft": 30,
+            "paddingRight": 30,
+            "primaryAxisAlignItems": "MAX",
+            "children": [
+              {
+                "name": "text",
+                "type": "FRAME",
+                "x": 50,
+                "y": 2080,
+                "width": 490,
+                "height": 86,
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 5.867260456085205,
+                "children": [
+                  {
+                    "name": "Gabia AI Platform",
+                    "type": "TEXT",
+                    "x": 50,
+                    "y": 2080,
+                    "width": 490,
+                    "height": 33,
+                    "text": "Gabia AI Platform",
+                    "font": {
+                      "size": 28,
+                      "weight": 500,
+                      "lineHeight": 33.4140625,
+                      "letterSpacing": 0,
+                      "align": "LEFT"
+                    },
+                    "fills": [
+                      {
+                        "type": "solid",
+                        "color": "#ffffff",
+                        "opacity": 1
+                      }
+                    ]
+                  },
+                  {
+                    "name": "머신러닝(ML) 및 대규모 언어 모델(LLM)의 개발-배포-학습을 아우르는 통합 오퍼레이션 환경(MLOps/LLMOps) 제공",
+                    "type": "TEXT",
+                    "x": 50,
+                    "y": 2119,
+                    "width": 490,
+                    "height": 47,
+                    "text": "머신러닝(ML) 및 대규모 언어 모델(LLM)의 개발-배포-학습을 아우르는\n통합 오퍼레이션 환경(MLOps/LLMOps) 제공",
+                    "font": {
+                      "size": 16,
+                      "weight": 400,
+                      "lineHeight": 23.46904182434082,
+                      "letterSpacing": 0,
+                      "align": "LEFT"
+                    },
+                    "fills": [
+                      {
+                        "type": "solid",
+                        "color": "#f5f5f5",
+                        "opacity": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 580,
+            "y": 1903,
+            "width": 423,
+            "height": 293,
+            "fills": [
+              {
+                "type": "image",
+                "imageSlot": {
+                  "slotId": "li",
+                  "role": "unknown",
+                  "expectedSize": {
+                    "width": 423,
+                    "height": 293
+                  },
+                  "aspectRatio": 1.4437,
+                  "imageRef": "90dbb29273f142a98c9cb1a7fa17bbb5468a19e0"
+                }
+              }
+            ],
+            "borderRadius": 8,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 8,
+            "paddingTop": 30,
+            "paddingBottom": 30,
+            "paddingLeft": 30,
+            "paddingRight": 30,
+            "primaryAxisAlignItems": "MAX",
+            "children": [
+              {
+                "name": "text",
+                "type": "FRAME",
+                "x": 610,
+                "y": 2080,
+                "width": 363,
+                "height": 86,
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 5.867260456085205,
+                "children": [
+                  {
+                    "name": "Title",
+                    "type": "TEXT",
+                    "x": 610,
+                    "y": 2080,
+                    "width": 363,
+                    "height": 33,
+                    "text": "Gabia GPU",
+                    "font": {
+                      "size": 28,
+                      "weight": 500,
+                      "lineHeight": 33.4140625,
+                      "letterSpacing": 0,
+                      "align": "LEFT"
+                    },
+                    "fills": [
+                      {
+                        "type": "solid",
+                        "color": "#ffffff",
+                        "opacity": 1
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Description",
+                    "type": "TEXT",
+                    "x": 610,
+                    "y": 2119,
+                    "width": 363,
+                    "height": 47,
+                    "text": "고전력 및 냉각 설비를 갖춘 데이터센터에서\nAI 워크로드에 최적화된 인프라 제공",
+                    "font": {
+                      "size": 16,
+                      "weight": 400,
+                      "lineHeight": 23.46904182434082,
+                      "letterSpacing": 0,
+                      "align": "LEFT"
+                    },
+                    "fills": [
+                      {
+                        "type": "solid",
+                        "color": "#f5f5f5",
+                        "opacity": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 20,
+            "y": 2216,
+            "width": 314,
+            "height": 154,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#09011a",
+                    "position": 0
+                  },
+                  {
+                    "color": "#18004c",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 8,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 8,
+            "paddingTop": 30,
+            "paddingBottom": 30,
+            "paddingLeft": 30,
+            "paddingRight": 30,
+            "primaryAxisAlignItems": "MAX",
+            "children": [
+              {
+                "name": "text",
+                "type": "FRAME",
+                "x": 50,
+                "y": 2246,
+                "width": 254,
+                "height": 94,
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 8.420141220092773,
+                "children": [
+                  {
+                    "name": "Frame 1000007824",
+                    "type": "FRAME",
+                    "x": 50,
+                    "y": 2246,
+                    "width": 254,
+                    "height": 67,
+                    "layoutMode": "VERTICAL",
+                    "primaryAxisAlignItems": "CENTER",
+                    "children": [
+                      {
+                        "name": "개발 속도 단축",
+                        "type": "TEXT",
+                        "x": 50,
+                        "y": 2246,
+                        "width": 91,
+                        "height": 19,
+                        "text": "개발 속도 단축",
+                        "font": {
+                          "size": 16,
+                          "weight": 600,
+                          "lineHeight": 19.09375,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#c8b4ff",
+                            "opacity": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "2X",
+                        "type": "TEXT",
+                        "x": 50,
+                        "y": 2265,
+                        "width": 52,
+                        "height": 48,
+                        "text": "2X",
+                        "font": {
+                          "size": 40,
+                          "weight": 700,
+                          "lineHeight": 47.734375,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "gradient_linear",
+                            "stops": [
+                              {
+                                "color": "#4e34b1",
+                                "position": 0
+                              },
+                              {
+                                "color": "#cab7ff",
+                                "position": 0.14524294435977936
+                              },
+                              {
+                                "color": "#4c27ac",
+                                "position": 0.7980769276618958
+                              },
+                              {
+                                "color": "#8058e8",
+                                "position": 0.9711538553237915
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "자동화 파이프라인으로 신속한 모델 개발",
+                    "type": "TEXT",
+                    "x": 50,
+                    "y": 2321,
+                    "width": 254,
+                    "height": 19,
+                    "text": "자동화 파이프라인으로 신속한 모델 개발",
+                    "font": {
+                      "size": 16,
+                      "weight": 400,
+                      "lineHeight": 19.09375,
+                      "letterSpacing": 0,
+                      "align": "LEFT"
+                    },
+                    "fills": [
+                      {
+                        "type": "solid",
+                        "color": "#ffffff",
+                        "opacity": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 354,
+            "y": 2216,
+            "width": 314,
+            "height": 154,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#09011a",
+                    "position": 0
+                  },
+                  {
+                    "color": "#18004c",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 8,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 8,
+            "paddingTop": 30,
+            "paddingBottom": 30,
+            "paddingLeft": 30,
+            "paddingRight": 30,
+            "primaryAxisAlignItems": "MAX",
+            "children": [
+              {
+                "name": "text",
+                "type": "FRAME",
+                "x": 384,
+                "y": 2246,
+                "width": 254,
+                "height": 94,
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 8.420141220092773,
+                "children": [
+                  {
+                    "name": "Frame 1000007824",
+                    "type": "FRAME",
+                    "x": 384,
+                    "y": 2246,
+                    "width": 254,
+                    "height": 67,
+                    "layoutMode": "VERTICAL",
+                    "primaryAxisAlignItems": "CENTER",
+                    "children": [
+                      {
+                        "name": "환경 구축 시간 절감",
+                        "type": "TEXT",
+                        "x": 384,
+                        "y": 2246,
+                        "width": 123,
+                        "height": 19,
+                        "text": "환경 구축 시간 절감",
+                        "font": {
+                          "size": 16,
+                          "weight": 600,
+                          "lineHeight": 19.09375,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#c8b4ff",
+                            "opacity": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "90%",
+                        "type": "TEXT",
+                        "x": 384,
+                        "y": 2265,
+                        "width": 76,
+                        "height": 48,
+                        "text": "90%",
+                        "font": {
+                          "size": 50.52084732055664,
+                          "weight": 700,
+                          "lineHeight": 60.289527893066406,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "gradient_linear",
+                            "stops": [
+                              {
+                                "color": "#4e34b1",
+                                "position": 0
+                              },
+                              {
+                                "color": "#cab7ff",
+                                "position": 0.14524294435977936
+                              },
+                              {
+                                "color": "#4c27ac",
+                                "position": 0.7980769276618958
+                              },
+                              {
+                                "color": "#8058e8",
+                                "position": 0.9711538553237915
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "별도 장비 없이 즉시 AI 환경 제공",
+                    "type": "TEXT",
+                    "x": 384,
+                    "y": 2321,
+                    "width": 254,
+                    "height": 19,
+                    "text": "별도 장비 없이 즉시 AI 환경 제공",
+                    "font": {
+                      "size": 16,
+                      "weight": 400,
+                      "lineHeight": 19.09375,
+                      "letterSpacing": 0,
+                      "align": "LEFT"
+                    },
+                    "fills": [
+                      {
+                        "type": "solid",
+                        "color": "#ffffff",
+                        "opacity": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "li",
+            "type": "FRAME",
+            "x": 688,
+            "y": 2216,
+            "width": 316,
+            "height": 154,
+            "fills": [
+              {
+                "type": "gradient_linear",
+                "stops": [
+                  {
+                    "color": "#09011a",
+                    "position": 0
+                  },
+                  {
+                    "color": "#18004c",
+                    "position": 1
+                  }
+                ]
+              }
+            ],
+            "borderRadius": 8,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 8,
+            "paddingTop": 30,
+            "paddingBottom": 30,
+            "paddingLeft": 30,
+            "paddingRight": 30,
+            "primaryAxisAlignItems": "MAX",
+            "children": [
+              {
+                "name": "text",
+                "type": "FRAME",
+                "x": 718,
+                "y": 2251,
+                "width": 248,
+                "height": 89,
+                "layoutMode": "VERTICAL",
+                "itemSpacing": 8.473773002624512,
+                "children": [
+                  {
+                    "name": "Frame 1000007824",
+                    "type": "FRAME",
+                    "x": 718,
+                    "y": 2251,
+                    "width": 248,
+                    "height": 62,
+                    "layoutMode": "VERTICAL",
+                    "primaryAxisAlignItems": "CENTER",
+                    "children": [
+                      {
+                        "name": "개발 생산성 향상",
+                        "type": "TEXT",
+                        "x": 718,
+                        "y": 2251,
+                        "width": 105,
+                        "height": 19,
+                        "text": "개발 생산성 향상",
+                        "font": {
+                          "size": 16,
+                          "weight": 600,
+                          "lineHeight": 19.09375,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "solid",
+                            "color": "#c8b4ff",
+                            "opacity": 1
+                          }
+                        ]
+                      },
+                      {
+                        "name": "50%",
+                        "type": "TEXT",
+                        "x": 718,
+                        "y": 2270,
+                        "width": 70,
+                        "height": 43,
+                        "text": "50%",
+                        "font": {
+                          "size": 50.8426399230957,
+                          "weight": 700,
+                          "lineHeight": 60.67354202270508,
+                          "letterSpacing": 0,
+                          "align": "LEFT"
+                        },
+                        "fills": [
+                          {
+                            "type": "gradient_linear",
+                            "stops": [
+                              {
+                                "color": "#4e34b1",
+                                "position": 0
+                              },
+                              {
+                                "color": "#cab7ff",
+                                "position": 0.14524294435977936
+                              },
+                              {
+                                "color": "#4c27ac",
+                                "position": 0.7980769276618958
+                              },
+                              {
+                                "color": "#8058e8",
+                                "position": 0.9711538553237915
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "모델·데이터·실험을 한 플랫폼에서 관리",
+                    "type": "TEXT",
+                    "x": 718,
+                    "y": 2321,
+                    "width": 248,
+                    "height": 19,
+                    "text": "모델·데이터·실험을 한 플랫폼에서 관리",
+                    "font": {
+                      "size": 16,
+                      "weight": 400,
+                      "lineHeight": 19.09375,
+                      "letterSpacing": 0,
+                      "align": "LEFT"
+                    },
+                    "fills": [
+                      {
+                        "type": "solid",
+                        "color": "#ffffff",
+                        "opacity": 1
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "loose_overlays": []
+}

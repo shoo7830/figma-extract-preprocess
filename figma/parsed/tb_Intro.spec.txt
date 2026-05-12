@@ -1,0 +1,37 @@
+# Intro — tb (1024×960)
+# y=50~1010
+
+## 섹션 트리
+[FRAME] Intro  1024×960  @(0,50)
+  fill: image  slot=intro  path=./images/intro.png
+  layout: VERTICAL  gap=311  padding=[250,20,40,20]
+  [FRAME] title  984×260  @(20,300)
+    layout: VERTICAL  gap=49
+    [FRAME] title  984×161  @(20,300)
+      layout: VERTICAL  gap=16
+      [TEXT] Gabia AI Platform  409×73  @(308,300)
+        text: "Gabia AI Platform"
+        font: size=52px w=700 lh=72.8px align=CENTER
+        fill: #ffffff
+      [TEXT] AI 프로젝트를 위한 강력한 도구 Gabia AI Platform을 경험해 보세요. GPU 도입부터 모델 학습·개발·배포까지 전 과정을 지원합니다.  984×72  @(20,389)
+        text: "AI 프로젝트를 위한 강력한 도구 Gabia AI Platform을 경험해 보세요.↵GPU 도입부터 모델 학습·개발·배포까지 전 과정을 지원합니다."
+        font: size=24px w=400 lh=36.0px align=CENTER
+        fill: #eaeaea
+    [INSTANCE] Primary button  280×50  @(372,510)
+      fill: #000000
+      borderRadius: 12px
+      layout: HORIZONTAL  gap=12.745098114013672  padding=[16,16]
+      [TEXT] 3개월 무료 이용하기  101×19  @(462,526)
+        text: "서비스 신청하기"
+        font: size=16px w=700 lh=19.1px align=CENTER
+        fill: #ffffff
+  [FRAME] scroll  182×89  @(421,871)
+    layout: VERTICAL  gap=
+    [TEXT] Powered by VESSL AI  182×25  @(421,871)
+      text: "Powered by VESSL AI"
+      font: size=18px w=700 lh=25.2px align=CENTER
+      fill: #ffffff
+    [TEXT] angle-down  182×64  @(421,896)
+      text: "angle-down"
+      font: size=64px w=300 lh=64.0px align=CENTER
+      fill: #ffffff

@@ -1,0 +1,143 @@
+{
+  "available_images": [
+    "-img.png",
+    "ai-img01.png",
+    "contact-usbg-1.png",
+    "defult.png",
+    "f-bottomicon1.png",
+    "f-bottomicon2.png",
+    "f-bottomicon3.png",
+    "hoverclick.png",
+    "icon01.png",
+    "icon02.png",
+    "icon03.png",
+    "icon04.png",
+    "img01.png",
+    "img02.png",
+    "img05.png",
+    "imghub.png",
+    "imgpiepeline.png",
+    "imgservice.png",
+    "mainbanner.png",
+    "pctbmb---------.png",
+    "primary-button.png"
+  ],
+  "slots_by_design": {
+    "pc": [
+      {
+        "slotId": "intro",
+        "imageRef": "12e054b53c35f16d2c9ec30d65dc90522649bd3c"
+      },
+      {
+        "slotId": "li",
+        "imageRef": "8b48f4bf906d1fab36712d985cf84166e4a1009f"
+      },
+      {
+        "slotId": "li",
+        "imageRef": "90dbb29273f142a98c9cb1a7fa17bbb5468a19e0"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "75b58d39765404f19cebe5e6952d74ddc8fabc3b"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "ce82e008ee4164d2740e400c6838787d96c3e269"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "235a8776eab53ab747528c7870c8c6d54e06fdb9"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "2de4bc6dfb3d8027a29c97f031220f6efeb56585"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "0590ae8003718fe3faf257cd74a2868f83566b68"
+      },
+      {
+        "slotId": "contact-us",
+        "imageRef": "5afbf568aa190fb6e80b1876ba31b27af89660b5"
+      }
+    ],
+    "tb": [
+      {
+        "slotId": "intro",
+        "imageRef": "9d49cff3041861da4918040b7d8257a8a5c237a3"
+      },
+      {
+        "slotId": "li",
+        "imageRef": "8b48f4bf906d1fab36712d985cf84166e4a1009f"
+      },
+      {
+        "slotId": "li",
+        "imageRef": "90dbb29273f142a98c9cb1a7fa17bbb5468a19e0"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "75b58d39765404f19cebe5e6952d74ddc8fabc3b"
+      },
+      {
+        "slotId": "rectangle-3263",
+        "imageRef": "ce82e008ee4164d2740e400c6838787d96c3e269"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "235a8776eab53ab747528c7870c8c6d54e06fdb9"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "2de4bc6dfb3d8027a29c97f031220f6efeb56585"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "0590ae8003718fe3faf257cd74a2868f83566b68"
+      },
+      {
+        "slotId": "contact-us",
+        "imageRef": "e3656ca6a2d254f352797ce85ebe04b163e3fa54"
+      }
+    ],
+    "mb": [
+      {
+        "slotId": "intro",
+        "imageRef": "9d49cff3041861da4918040b7d8257a8a5c237a3"
+      },
+      {
+        "slotId": "li",
+        "imageRef": "8b48f4bf906d1fab36712d985cf84166e4a1009f"
+      },
+      {
+        "slotId": "li",
+        "imageRef": "90dbb29273f142a98c9cb1a7fa17bbb5468a19e0"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "75b58d39765404f19cebe5e6952d74ddc8fabc3b"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "ce82e008ee4164d2740e400c6838787d96c3e269"
+      },
+      {
+        "slotId": "rectangle-3263",
+        "imageRef": "235a8776eab53ab747528c7870c8c6d54e06fdb9"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "2de4bc6dfb3d8027a29c97f031220f6efeb56585"
+      },
+      {
+        "slotId": "img",
+        "imageRef": "0590ae8003718fe3faf257cd74a2868f83566b68"
+      },
+      {
+        "slotId": "contact-us",
+        "imageRef": "e3656ca6a2d254f352797ce85ebe04b163e3fa54"
+      }
+    ]
+  },
+  "instructions": "manual_mapping 섹션에 slotId → 파일명 매핑을 작성하면 inject_actual_paths_by_slot이 적용됩니다.",
+  "manual_mapping": {}
+}

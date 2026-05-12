@@ -1,0 +1,99 @@
+# Workflows — pc (1920×683)
+# y=5224~5907
+
+## 섹션 트리
+[FRAME] Workflows  1920×683  @(0,5224)
+  fill: gradient_linear [#0f0331 → #110915]
+  layout: VERTICAL  gap=60  padding=[120,370,120,370]
+  [FRAME] title  1180×188  @(370,5344)
+    layout: VERTICAL  gap=20
+    [TEXT] Workflows  1180×28  @(370,5344)
+      text: "Workflows"
+      font: size=20px w=700 lh=28.0px align=CENTER
+      fill: #7959ff
+    [TEXT] Gabia AI Platform 위에서 비용과 시간의 벽을 넘어보세요  1180×140  @(370,5392)
+      text: "Gabia AI Platform 위에서↵비용과 시간의 벽을 넘어보세요"
+      font: size=50px w=500 lh=70.0px align=CENTER
+      fill: #ffffff
+  [FRAME] Steps Container  1180×195  @(370,5592)
+    layout: HORIZONTAL  gap=
+    [FRAME] step1  295×195  @(370,5592)
+      layout: VERTICAL  gap=20
+      [FRAME] img_setp1  294×100  @(370,5592)
+        layout: HORIZONTAL  gap=
+        [VECTOR] Line 220  97×0  @(370,5642)
+          stroke: #4e34b0  weight=1px
+        [RECTANGLE] Icon  100×100  @(467,5592)
+          borderRadius: 10px
+        [VECTOR] Line 221  98×0  @(567,5642)
+          stroke: #4e34b0  weight=1px
+      [FRAME] text  294×75  @(370,5712)
+        layout: VERTICAL  gap=9
+        [TEXT] Title  294×24  @(370,5712)
+          text: "자원 생성"
+          font: size=20px w=700 lh=23.9px align=CENTER
+          fill: #ffffff
+        [TEXT] Description  294×42  @(370,5745)
+          text: "AI/LLM에 최적화된 GPU를 ↵생성합니다."
+          font: size=18px w=400 lh=21.5px align=CENTER
+          fill: #f5f5f5
+    [FRAME] step2  295×195  @(665,5592)
+      layout: VERTICAL  gap=20
+      [FRAME] img_setp2  294×100  @(665,5592)
+        layout: HORIZONTAL  gap=
+        [VECTOR] Line 220  97×0  @(665,5642)
+          stroke: #4e34b0  weight=1px
+        [RECTANGLE] Icon  100×100  @(762,5592)
+          borderRadius: 10px
+        [VECTOR] Line 221  98×0  @(862,5642)
+          stroke: #4e34b0  weight=1px
+      [FRAME] text  294×75  @(665,5712)
+        layout: VERTICAL  gap=9
+        [TEXT] Title  294×24  @(665,5712)
+          text: "모델 학습"
+          font: size=20px w=700 lh=23.9px align=CENTER
+          fill: #ffffff
+        [TEXT] Description  294×42  @(665,5745)
+          text: "필요한 리소스를 할당하고 모델을↵ 훈련합니다."
+          font: size=18px w=400 lh=21.5px align=CENTER
+          fill: #f5f5f5
+    [FRAME] step3  295×195  @(960,5592)
+      layout: VERTICAL  gap=20
+      [FRAME] img_setp3  294×100  @(960,5592)
+        layout: HORIZONTAL  gap=
+        [VECTOR] Line 220  97×0  @(960,5642)
+          stroke: #4e34b0  weight=1px
+        [RECTANGLE] Icon  100×100  @(1057,5592)
+          borderRadius: 10px
+        [VECTOR] Line 221  98×0  @(1157,5642)
+          stroke: #4e34b0  weight=1px
+      [FRAME] text  294×75  @(960,5712)
+        layout: VERTICAL  gap=9
+        [TEXT] Title  294×24  @(960,5712)
+          text: "모델 배포"
+          font: size=20px w=700 lh=23.9px align=CENTER
+          fill: #ffffff
+        [TEXT] Description  294×42  @(960,5745)
+          text: "클릭 한 번으로 빠르게 배포하고↵ 활용합니다."
+          font: size=18px w=400 lh=21.5px align=CENTER
+          fill: #f5f5f5
+    [FRAME] step4  297×195  @(1255,5592)
+      layout: VERTICAL  gap=20
+      [FRAME] img_setp4  297×100  @(1255,5592)
+        layout: HORIZONTAL  gap=
+        [VECTOR] Line 220  97×0  @(1255,5642)
+          stroke: #4e34b0  weight=1px
+        [RECTANGLE] Icon  100×100  @(1352,5592)
+          borderRadius: 10px
+        [VECTOR] Line 219  98×0  @(1452,5642)
+          stroke: #4e34b0  weight=1px
+      [FRAME] text  294×75  @(1255,5712)
+        layout: VERTICAL  gap=9
+        [TEXT] Title  294×24  @(1255,5712)
+          text: "운영 확장"
+          font: size=20px w=700 lh=23.9px align=CENTER
+          fill: #ffffff
+        [TEXT] Description  294×42  @(1255,5745)
+          text: "모델 성능을 모니터링하고 필요에 ↵따라 쉽게 확장합니다."
+          font: size=18px w=400 lh=21.5px align=CENTER
+          fill: #f5f5f5

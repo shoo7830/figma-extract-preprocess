@@ -1,0 +1,220 @@
+{
+  "prefix": "mb",
+  "section": "Intro",
+  "bounds": {
+    "x": 0,
+    "y": 45,
+    "width": 375,
+    "height": 560
+  },
+  "tree": {
+    "name": "Intro",
+    "type": "FRAME",
+    "x": 0,
+    "y": 45,
+    "width": 375,
+    "height": 560,
+    "fills": [
+      {
+        "type": "image",
+        "imageSlot": {
+          "slotId": "intro",
+          "role": "unknown",
+          "expectedSize": {
+            "width": 375,
+            "height": 560
+          },
+          "aspectRatio": 0.6696,
+          "imageRef": "9d49cff3041861da4918040b7d8257a8a5c237a3"
+        }
+      }
+    ],
+    "layoutMode": "VERTICAL",
+    "itemSpacing": 102,
+    "paddingTop": 100,
+    "paddingBottom": 40,
+    "paddingLeft": 20,
+    "paddingRight": 20,
+    "counterAxisAlignItems": "CENTER",
+    "children": [
+      {
+        "name": "title",
+        "type": "FRAME",
+        "x": 16,
+        "y": 145,
+        "width": 343,
+        "height": 261,
+        "layoutMode": "VERTICAL",
+        "itemSpacing": 49,
+        "counterAxisAlignItems": "CENTER",
+        "children": [
+          {
+            "name": "title",
+            "type": "FRAME",
+            "x": 16,
+            "y": 145,
+            "width": 343,
+            "height": 162,
+            "layoutMode": "VERTICAL",
+            "itemSpacing": 16,
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "Gabia AI Platform",
+                "type": "TEXT",
+                "x": 46,
+                "y": 145,
+                "width": 283,
+                "height": 50,
+                "text": "Gabia AI Platform",
+                "font": {
+                  "size": 36,
+                  "weight": 700,
+                  "lineHeight": 50.39999771118164,
+                  "letterSpacing": -0.72,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff",
+                    "opacity": 1
+                  }
+                ]
+              },
+              {
+                "name": "AI 프로젝트를 위한 강력한 도구 Gabia AI Platform을 경험해 보세요. GPU 도입부터 모델 학습·개발·배포까지 전 과정을 지원합니다.",
+                "type": "TEXT",
+                "x": 16,
+                "y": 211,
+                "width": 343,
+                "height": 96,
+                "text": "AI 프로젝트를 위한 강력한 도구 \nGabia AI Platform을 경험해 보세요.\nGPU 도입부터 모델 학습·개발·배포까지\n 전 과정을 지원합니다.",
+                "font": {
+                  "size": 16,
+                  "weight": 400,
+                  "lineHeight": 24,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#eaeaea",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Primary button",
+            "type": "INSTANCE",
+            "x": 47,
+            "y": 356,
+            "width": 281,
+            "height": 50,
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#000000",
+                "opacity": 1
+              }
+            ],
+            "borderRadius": 12,
+            "layoutMode": "HORIZONTAL",
+            "itemSpacing": 12.745098114013672,
+            "paddingTop": 16,
+            "paddingBottom": 16,
+            "primaryAxisAlignItems": "CENTER",
+            "counterAxisAlignItems": "CENTER",
+            "children": [
+              {
+                "name": "3개월 무료 이용하기",
+                "type": "TEXT",
+                "x": 137,
+                "y": 372,
+                "width": 101,
+                "height": 19,
+                "text": "서비스 신청하기",
+                "font": {
+                  "size": 16,
+                  "weight": 700,
+                  "lineHeight": 19.09375,
+                  "letterSpacing": 0,
+                  "align": "CENTER"
+                },
+                "fills": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff",
+                    "opacity": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "scroll",
+        "type": "FRAME",
+        "x": 96,
+        "y": 508,
+        "width": 182,
+        "height": 89,
+        "layoutMode": "VERTICAL",
+        "counterAxisAlignItems": "CENTER",
+        "children": [
+          {
+            "name": "Powered by VESSL AI",
+            "type": "TEXT",
+            "x": 96,
+            "y": 508,
+            "width": 182,
+            "height": 25,
+            "text": "Powered by VESSL AI",
+            "font": {
+              "size": 18,
+              "weight": 700,
+              "lineHeight": 25.19999885559082,
+              "letterSpacing": 0,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff",
+                "opacity": 0.8999999761581421
+              }
+            ]
+          },
+          {
+            "name": "angle-down",
+            "type": "TEXT",
+            "x": 96,
+            "y": 533,
+            "width": 182,
+            "height": 64,
+            "text": "angle-down",
+            "font": {
+              "size": 64,
+              "weight": 300,
+              "lineHeight": 64,
+              "letterSpacing": -1.28,
+              "align": "CENTER"
+            },
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff",
+                "opacity": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "loose_overlays": []
+}
