@@ -43,6 +43,7 @@ This is a **Figma plugin** with two separate build targets that are wired togeth
 - `extractCornerRadius()` — handles `figma.mixed` for per-corner radii
 - `extractStyledTextSegments()` — extracts mixed-style text runs (Plugin API only, not available in REST API)
 
-### Skill: `skill/scripts/figma_extract.py`
+### Skill scripts (`skill/scripts/`)
 
-A standalone Python CLI that uses the **Figma REST API** (no plugin needed). Requires `FIGMA_TOKEN` env var. Outputs `raw`, `structure`, `design`, `tokens`, `manifest`, or `png`. See `skill/SKILL.md` for full usage.
+- `figma_extract.py` — standalone Python CLI using the Figma REST API. Requires `FIGMA_TOKEN` env var. Outputs `raw`, `structure`, `design`, `tokens`, `manifest`, or `png`. See `skill/SKILL.md` for full usage.
+- `parse_figma.mjs` — post-processes raw JSON into per-section files. Usage: `node skill/scripts/parse_figma.mjs --dir ./<folder> --out ./<folder>/parsed`

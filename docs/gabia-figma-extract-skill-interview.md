@@ -78,9 +78,23 @@ Figma 시안(PC/TB/MB)에서 raw JSON과 이미지 에셋을 자동 추출하고
 | | 로컬 먼저 (선택) | 처음부터 전역 |
 |---|---|---|
 | 스크립트 관리 | figma-json-exporter 한 곳 | 두 곳 동기화 필요 |
-| 나중에 이전 작업 | 필요 (파일 3개 복사 + 경로 수정) | 없음 |
+| 나중에 이전 작업 | 필요 (파일 2개 복사, 경로 수정 불필요) | 없음 |
 | 개발 편의성 | 높음 | 보통 |
-| 다른 프로젝트 사용 | 불가 (현재) | 가능 |
+| 다른 프로젝트 사용 | 가능 (readlink 절대 경로 방식) | 가능 |
+
+### 결정 7. parse_figma.mjs 위치: 루트 → skill/scripts/ 이동
+- **변경:** 최초 스펙에서 `parse_figma.mjs`는 프로젝트 루트에 위치
+- **문제 발견:** `figma_extract.py`는 `skill/scripts/`에 있는데 `parse_figma.mjs`만 루트에 있어 전역 배포 시 따로 챙겨야 하는 불일치
+- **결정:** `skill/scripts/parse_figma.mjs`로 이동 — 스킬 관련 파일을 한 곳에 모아 폴더째로 이동 가능하게 구조화
+
+### 결정 8. 스크립트 경로: 상대 경로 → readlink 절대 경로
+- **문제:** 스킬 파일에 `python3 skill/scripts/figma_extract.py`처럼 상대 경로 사용 시 CWD가 figma-json-exporter 루트일 때만 동작 → 다른 프로젝트에서 호출하면 즉시 실패
+- **해결:** `readlink -f ~/.claude/skills/gabia-figma-extract/SKILL.md` 로 심링크를 따라 절대 경로 계산
+  ```bash
+  SKILL_DIR=$(dirname "$(readlink -f ~/.claude/skills/gabia-figma-extract/SKILL.md)")
+  SCRIPTS_DIR="$SKILL_DIR/scripts"
+  ```
+- **장점:** 어느 디렉토리에서 호출해도 동작, 전역 배포 후에도 경로 수정 불필요
 
 ---
 
@@ -110,32 +124,40 @@ Figma 시안(PC/TB/MB)에서 raw JSON과 이미지 에셋을 자동 추출하고
 ### 실행 흐름
 
 ```
-1. FIGMA_TOKEN 확인 (.zshrc)
-   └─ 없으면: 프롬프트로 입력 요청 → 입력하면 .zshrc에 저장 → 입력 거부하면 중단
+1. 스크립트 경로 확인 (readlink로 절대 경로 계산)
 
-2. 폴더명 입력 (필수, 기본값 없음)
-   └─ 예: figma, vessl, my-project
+2. FIGMA_TOKEN 확인 (.zshrc)
+   └─ grep -E '^export FIGMA_TOKEN=' 으로 정확히 파싱
+   └─ 없으면: 프롬프트로 입력 요청 → .zshrc에 저장 → 거부하면 중단
 
-3. PC URL 입력 (필수)
-4. TB URL 입력 (필수)
-5. MB URL 입력 (필수)
+3. 폴더명 입력 (필수, 기본값 없음)
+   └─ 특수문자 validation (공백, /, \ 불가)
+   └─ 이미 존재하는 폴더면 덮어쓰기 경고 + y/n 확인
+
+4. PC URL 입력 (필수)
+5. TB URL 입력 (필수)
+6. MB URL 입력 (필수)
    └─ 3개 중 하나라도 비어있으면: 경고 메시지 출력 후 중단
 
-6. 이미지 모음 프레임 URL 입력 (선택, 없으면 엔터)
+7. 이미지 모음 프레임 URL 입력 (선택, 없으면 엔터)
 
-7. 실행:
-   python3 skill/scripts/figma_extract.py \
-     --url "{PC_URL}" \
-     --url "{TB_URL}" \
-     --url "{MB_URL}" \
+8. 실행 전 요약 확인 (y/n)
+   └─ 폴더명, PC/TB/MB URL, 이미지 프레임, 스크립트 경로 표시
+
+9. 실행:
+   FIGMA_TOKEN="..." python3 "$SCRIPTS_DIR/figma_extract.py" \
+     --url "{PC_URL}" --url "{TB_URL}" --url "{MB_URL}" \
      [--image-node "{IMG_URL}"] \
-     --types raw,images \
-     --output ./{folder}
+     --types raw,images --output ./{folder}
 
-8. 실행:
-   node parse_figma.mjs --dir ./{folder} --out ./{folder}/parsed
+10. raw JSON 생성 확인
+    └─ *_raw.json 파일 없으면: 실패 원인 힌트 출력 후 중단
+    └─ (주요 원인: 토큰 만료 / node-id 오류 / 네트워크 오류)
 
-9. 완료 메시지 출력
+11. 실행:
+    node "$SCRIPTS_DIR/parse_figma.mjs" --dir ./{folder} --out ./{folder}/parsed
+
+12. 완료 메시지 출력
 ```
 
 ### 출력 구조
@@ -166,10 +188,30 @@ Figma 시안(PC/TB/MB)에서 raw JSON과 이미지 에셋을 자동 추출하고
 
 ---
 
+## 스킬 구현 후 개선 이력
+
+### 2026-05-19 — 초기 구현 후 5가지 문제 발견 및 개선
+
+스킬 파일 초안 작성 후 코드 리뷰를 통해 아래 문제를 발견하고 즉시 개선했습니다.
+
+| 우선순위 | 문제 | 개선 내용 |
+|----------|------|-----------|
+| P1 🔴 | 스크립트 경로가 CWD에 묶여 다른 프로젝트에서 호출 시 즉시 실패 | `readlink -f`로 절대 경로 계산 (Phase 1 추가) |
+| P2 🟠 | `grep FIGMA_TOKEN`이 주석·유사 변수명도 매칭 | `grep -E '^export FIGMA_TOKEN='` + `sed` 파싱으로 교체 |
+| P3 🟠 | 6개 입력 후 바로 실행 — URL 오타 확인 불가 | 실행 전 요약 + y/n 확인 단계 추가 (Phase 6) |
+| P4 🟡 | 기존 폴더 덮어쓰기 경고 없음 | 폴더 존재 확인 + 덮어쓰기 경고 + y/n (Phase 3) |
+| P5 🟡 | Phase 5 실패 시 Phase 6(parse)로 진입 가능 | raw JSON 생성 확인 단계 추가 (Phase 8) |
+
+**부가 변경:** `parse_figma.mjs`를 프로젝트 루트에서 `skill/scripts/`로 이동 — 스킬 관련 파일 일원화 및 전역 배포 시 경로 수정 불필요.
+
+---
+
 ## 다음 단계
 
 ### 단기 (로컬 스킬 완성)
-- [ ] `skill/gabia-figma-extract.md` 스킬 파일 작성
+- [x] `skill/gabia-figma-extract.md` 스킬 파일 작성
+- [x] 5가지 문제 개선 (경로 절대화, TOKEN 파싱, 실행 전 확인, 폴더 중복 경고, Phase guard)
+- [x] `parse_figma.mjs` → `skill/scripts/` 이동
 - [ ] 실제 프로젝트에서 동작 검증
 
 ### 장기 (전역 배포)
@@ -180,11 +222,11 @@ gabia-figma-extract-skill/       ← 새 git 저장소
 ├── SKILL.md
 └── scripts/
     ├── figma_extract.py         ← skill/scripts/figma_extract.py 복사
-    └── parse_figma.mjs          ← 루트의 parse_figma.mjs 복사
+    └── parse_figma.mjs          ← skill/scripts/parse_figma.mjs 복사
 ```
 
-- [ ] 스킬 내 경로 참조를 상대 경로로 수정 (`$(dirname $0)/scripts/...`)
-- [ ] `~/.claude/skills/gabia-figma-extract/` 에 설치하여 전역 사용 검증
+- [ ] `git clone <repo> ~/.claude/skills/gabia-figma-extract` 설치 검증
+- [ ] 심링크 제거 (readlink 방식으로 경로 수정 불필요)
 - [ ] 팀 공유 또는 omc 배포 검토
 
 ---
@@ -194,4 +236,4 @@ gabia-figma-extract-skill/       ← 새 git 저장소
 - [Confluence: Figma Raw데이터 추출 SKILL 개선안](https://confluence.gabia.com/spaces/o2cplaform/pages/259092043)
 - [스펙 파일](.omc/specs/deep-interview-figma-skill.md)
 - `skill/scripts/figma_extract.py`
-- `parse_figma.mjs`
+- `skill/scripts/parse_figma.mjs`

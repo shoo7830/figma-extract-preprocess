@@ -70,7 +70,7 @@ python3 skill/scripts/figma_extract.py \
 ### 섹션 분할 커맨드
 
 ```bash
-node parse_figma.mjs --dir ./figma --out ./figma/parsed
+node skill/scripts/parse_figma.mjs --dir ./figma --out ./figma/parsed
 ```
 
 실행 결과:

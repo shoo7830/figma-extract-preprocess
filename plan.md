@@ -8,7 +8,7 @@
 - 피그마 파일은 .zshrc 에 전역 저장해 놓고 사용하고 프롬프트로 받으면 거기에 저장할것 
 - 폴더명도 문서상 figma 라고 되어 있으나 이것도 프롬프트로 받기
 - 로우파일 가지고온후 아까 입력받은 폴더명 반영한 명령어로
-  - node parse_figma.mjs --dir ./figma --out ./figma/parsed 수행
+  - node skill/scripts/parse_figma.mjs --dir ./figma --out ./figma/parsed 수행
 - 그 명령어까지 수행하면 완료 
   - 해당 폴더는 추후 작업할 프로젝트에 폴더채로 옮겨서 컨플런스 문서상의 프롬프트로 페이지 생성을 요청할 예정임
 

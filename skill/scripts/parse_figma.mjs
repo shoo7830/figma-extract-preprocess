@@ -3,12 +3,12 @@
  * Figma JSON 파서 — structure + design 머지 후 섹션별 분할 출력
  *
  * 사용법:
- *   node parse_figma.mjs                         # 현재 디렉토리 자동 탐색
- *   node parse_figma.mjs --dir ./figma           # 디렉토리 지정
- *   node parse_figma.mjs --prefix desktop_1920   # 특정 파일만
- *   node parse_figma.mjs --section-prefix Sec    # 섹션 이름 prefix 필터
- *   node parse_figma.mjs --out ./figma/parsed    # 출력 디렉토리 지정
- *   node parse_figma.mjs --section Secton_00_Hero # 특정 섹션만
+ *   node skill/scripts/parse_figma.mjs                         # 현재 디렉토리 자동 탐색
+ *   node skill/scripts/parse_figma.mjs --dir ./figma           # 디렉토리 지정
+ *   node skill/scripts/parse_figma.mjs --prefix desktop_1920   # 특정 파일만
+ *   node skill/scripts/parse_figma.mjs --section-prefix Sec    # 섹션 이름 prefix 필터
+ *   node skill/scripts/parse_figma.mjs --out ./figma/parsed    # 출력 디렉토리 지정
+ *   node skill/scripts/parse_figma.mjs --section Secton_00_Hero # 특정 섹션만
  *
  * 의존성: Node.js 내장 모듈만 사용 (별도 설치 불필요)
  */
