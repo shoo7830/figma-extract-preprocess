@@ -42,9 +42,9 @@ SCRIPTS_DIR = $SKILL_DIR/scripts
 
 예시:
 ```
-readlink 결과: /Users/evan/figma-json-exporter/skill/gabia-figma-extract.md
-SKILL_DIR:     /Users/evan/figma-json-exporter/skill
-SCRIPTS_DIR:   /Users/evan/figma-json-exporter/skill/scripts
+readlink 결과: /Users/evan/figma-json-exporter/skill/gabia-figma-extract/SKILL.md
+SKILL_DIR:     /Users/evan/figma-json-exporter/skill/gabia-figma-extract
+SCRIPTS_DIR:   /Users/evan/figma-json-exporter/skill/gabia-figma-extract/scripts
 ```
 
 이후 모든 스크립트 호출은 `$SCRIPTS_DIR` 절대 경로를 사용한다.
@@ -252,8 +252,8 @@ node /path/to/skill/scripts/parse_figma.mjs --dir ./figma --out ./figma/parsed
 gabia-figma-extract-skill/
 ├── SKILL.md
 └── scripts/
-    ├── figma_extract.py    ← skill/scripts/figma_extract.py 복사
-    └── parse_figma.mjs     ← skill/scripts/parse_figma.mjs 복사
+    ├── figma_extract.py    ← skill/gabia-figma-extract/scripts/figma_extract.py 복사
+    └── parse_figma.mjs     ← skill/gabia-figma-extract/scripts/parse_figma.mjs 복사
 ```
 
 설치: `git clone <repo> ~/.claude/skills/gabia-figma-extract`
