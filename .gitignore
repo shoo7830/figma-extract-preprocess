@@ -17,5 +17,5 @@ npm-debug.log*
 pnpm-debug.log*
 
 # OMC / Claude state
-.omc/state/
+.omc/
 .claude/
